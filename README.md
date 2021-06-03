@@ -47,7 +47,7 @@
 - Añadir marca de tiempo al archivo comprimido a no ser que se pueda obtener un timestamp de otro lugar
 
 
-### Librerias Python
+## Librerias Python
 
 - shutil (copia, recompilacion de archivos)
 - logging
