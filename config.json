@@ -1,28 +1,27 @@
 {
-    "GENERAL": {
-        "AUTO_BACKUP" : true,
-        "SPOTIFY" : true,
-        "LOG_DIR" : "C:\\",
-        "TEMP_DIR": "C:\\",
-        "ENCRYPT": false
-    },
-    "DRIVE": {
-        "EMAIL" : true,
-        "PASS" : true,
-        "API_KEY" : true
-    },
     "SPOTIFY": {
-        "EMAIL" : true,
-        "PASS" : true
-    },
-    "TIMES": {
-        "MINUTE" : true,
-        "HOUR" : true,
-        "DAY" : true,
-        "MONTH" : true
-    },
+        "EMAIL": true, 
+        "PASS": true
+    }, 
     "DIRECTORIES": [
-        "C:\\",
         "C:\\"
-    ]
+    ], 
+    "TIMES": {
+        "MINUTE": true, 
+        "DAY": true, 
+        "HOUR": true, 
+        "MONTH": true
+    }, 
+    "DRIVE": {
+        "API_KEY": true, 
+        "EMAIL": true, 
+        "PASS": true
+    }, 
+    "GENERAL": {
+        "AUTO_BACKUP": true, 
+        "ENCRYPT": false, 
+        "LOG_DIR": "C:\\", 
+        "TEMP_DIR": "C:\\", 
+        "SPOTIFY": true
+    }
 }
