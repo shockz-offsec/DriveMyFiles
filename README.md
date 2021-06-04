@@ -10,7 +10,6 @@
 - Copia de seguridad de spotify mediante web (http://www.spotmybackup.com) exportado en json (inicialmente no se contempla la importación)
 - Mostrar capacidad de la copia de seguridad local y en nube.
 - Eliminar copias de seguridad antiguas.
-- Compresión de archivos
 - Barras de progreso
 
 ## Archivo de configuración
