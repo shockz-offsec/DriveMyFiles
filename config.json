@@ -4,6 +4,7 @@
         "PASS": true
     }, 
     "DIRECTORIES": [
+        "C:\\",
         "C:\\"
     ], 
     "TIMES": {
@@ -19,9 +20,7 @@
     }, 
     "GENERAL": {
         "AUTO_BACKUP": true, 
-        "ENCRYPT": false, 
-        "LOG_DIR": "C:\\", 
-        "TEMP_DIR": "C:\\", 
+        "ENCRYPT": false,
         "SPOTIFY": true
     }
 }
