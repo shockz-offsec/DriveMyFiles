@@ -1,9 +1,11 @@
 import os
 import json
 import shutil
+import datetime
 from distutils.dir_util import copy_tree
 import zipfile
 from logger_settings import logger
+import drive
 
 """Write into the json file"""
 def writing():
@@ -12,29 +14,37 @@ def writing():
     with open('config.json', 'w') as outfile:
         json.dump(json_data, outfile, indent=4,ensure_ascii=False)
 
-"""Compress all the files recursively into a zipfile located in the temp dir"""
-def compress():
 
-    zp_name = 'backupdrive.zip'
-    zp_path = 'temp\\' + zp_name
+"""Compress all the files recursively into a zipfile located in the temp dir
+Args: 
+    dir_name: name of the temp files directory
+    dir_path: pathe of the temp files direcory
+"""
+def compress(dir_name, dir_path):
+    
+    zp_name = dir_name + '.zip'
+    zp_path = 'Temp\\' + zp_name
+    
     zp_file =  zipfile.ZipFile(zp_path, 'w')
     
     logger.info("Compressing files ...")
-    for root, subfolders, files in os.walk('temp'):
+    for root, subfolders, files in os.walk(dir_path):
         for filename in files:
-            if filename != zp_name:
-                zp_file.write(os.path.join(root, filename), os.path.relpath(os.path.join(root,filename), 'temp'), compress_type = zipfile.ZIP_DEFLATED)
+                zp_file.write(os.path.join(root, filename), os.path.relpath(os.path.join(root,filename), 'Temp\\' + dir_name), compress_type = zipfile.ZIP_DEFLATED)
     
     zp_file.close()
-    logger.info("All files compressed")
+    logger.info("All files compressed into "+ zp_path)
+    drive.upload_drive(zp_path)
+
 
 """Unzip the zip file downloaded from google drive
 Args: 
     zp_file: zipfile's path to unzip
     dest_dir: destination path
 """
-def unzip(zp_path,dest_dir):
+def unzip(zp_path, dest_dir):
     logger.info("Unzipping...")
+    zp_file = None
     try:
         zp_file = zipfile.ZipFile(zp_path)
     except:
@@ -48,7 +58,7 @@ def unzip(zp_path,dest_dir):
 Args:
     temp_dir: temp's path
     
-Call it after upload the files to Google Drive
+*Call it after upload the files to Google Drive
 """
 def clean(temp_dir):
     logger.info("Cleaning temp files...")
@@ -59,32 +69,46 @@ def clean(temp_dir):
         logger.error("Could not delete the directory - " + e.strerror)
     logger.info("Complete cleaning")
 
+
 """Extracts all the information from the directories specified in the configuration file, copying them to the temporary directory
 Args:
     make_compression: True indicates that we want to compress, False indicates that we don't want to compress
 """
 def recompile(make_compression=True):
 
-    json_data = json.load(open('config.json','r'))
+    json_data = json.load(open('config.json', 'r'))
     lista = list(json_data["DIRECTORIES"])
     
-    if not os.path.exists('temp'):
-        os.makedirs('temp')
+    # Name of the folder where the files are stored if not compressed
+    now = datetime.datetime.now()
+    dir_name = 'backupdrive' + now.strftime("_%d_%b_%Y_%H_%M_%S")
+    dir_path = 'Temp/' + dir_name
+    
+    if not os.path.exists('Temp'):
+        os.makedirs('Temp')
+        # A container folder is created for each copy.
+        os.makedirs(dir_path)
     logger.info("Copying files...")
     for ruta in lista:
         if os.path.exists(ruta):
-                if os.path.isdir(ruta):
-                    copy_tree(str(ruta), 'temp')
-                else:
-                    shutil.copy2(str(ruta), 'temp')
-    if(make_compression):
-        compress()
+            if os.path.isdir(ruta):
+                copy_tree(str(ruta), dir_path)
+            else:
+                shutil.copy2(str(ruta), dir_path)
+    logger.info("Copy completed")
     
+    if(make_compression):
+        compress(dir_name, dir_path)
+    else:
+        drive.upload_drive(dir_path)
+
+
 if __name__ == "__main__":
     # execute this at the start of the script
-    if not os.path.exists('temp'):
-        os.makedirs('temp')
+    if not os.path.exists('log'):
+        os.makedirs('log')
     
     # Test
-    recompile()
-    
+    #recompile()
+    #drive.get_credentials()
+    #print(drive.get_size())
