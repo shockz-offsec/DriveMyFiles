@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="DriveMyFiles">
+    <file>resources/options.png</file>
+    <file>resources/drive.png</file>
+  </qresource>
+</RCC>
