@@ -127,12 +127,7 @@ QLineEdit {
 	selection-background-color:#007b50;
 	selection-color: #FFFFFF;
 }
-QLabel {
-	color: #a9b7c6;
-}
-QLCDNumber {
-	color: #37e6b4;
-}
+
 QProgressBar {
 	text-align: center;
 	color: rgb(240, 240, 240);
