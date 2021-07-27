@@ -9,10 +9,17 @@ Available at: https://github.com/GTRONICK/QSS/blob/master/MaterialDark.qss
 QMainWindow {
 	background-color:#1e1d23;
 }
+QListView {
+	background-color:#1e1d23;
+}
 QDialog {
 	background-color:#1e1d23;
 }
-QColorDialog {
+QLabel{
+
+	background-color:#1e1d23;
+}
+QColorDialog{
 	background-color:#1e1d23;
 }
 QTextEdit {
@@ -32,10 +39,7 @@ QPlainTextEdit {
 }
 QPushButton{
 	border-style: solid;
-	border-top-color: transparent;
-	border-right-color: transparent;
-	border-left-color: transparent;
-	border-bottom-color: transparent;
+	border-color: #050a0e;
 	border-width: 1px;
 	border-style: solid;
 	color: #a9b7c6;

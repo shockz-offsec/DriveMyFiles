@@ -27,7 +27,7 @@
     <property name="geometry">
      <rect>
       <x>640</x>
-      <y>110</y>
+      <y>140</y>
       <width>118</width>
       <height>23</height>
      </rect>
@@ -39,14 +39,26 @@
    <widget class="QCommandLinkButton" name="link_auth">
     <property name="geometry">
      <rect>
-      <x>350</x>
+      <x>390</x>
       <y>30</y>
-      <width>185</width>
-      <height>41</height>
+      <width>100</width>
+      <height>40</height>
      </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
     </property>
     <property name="text">
      <string>Get Auth</string>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>20</width>
+      <height>20</height>
+     </size>
     </property>
    </widget>
    <widget class="QLabel" name="label">
@@ -55,14 +67,17 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>0</y>
-      <width>71</width>
-      <height>21</height>
+      <x>390</x>
+      <y>10</y>
+      <width>101</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">
      <string>Autentificación</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QFrame" name="frame">
@@ -86,10 +101,10 @@
     <widget class="QLabel" name="label_2">
      <property name="geometry">
       <rect>
-       <x>30</x>
+       <x>40</x>
        <y>50</y>
-       <width>47</width>
-       <height>13</height>
+       <width>31</width>
+       <height>16</height>
       </rect>
      </property>
      <property name="text">
@@ -99,7 +114,7 @@
     <widget class="QLabel" name="label_3">
      <property name="geometry">
       <rect>
-       <x>30</x>
+       <x>40</x>
        <y>180</y>
        <width>47</width>
        <height>13</height>
@@ -114,7 +129,7 @@
       <rect>
        <x>10</x>
        <y>80</y>
-       <width>81</width>
+       <width>91</width>
        <height>71</height>
       </rect>
      </property>
@@ -130,7 +145,7 @@
       <rect>
        <x>10</x>
        <y>200</y>
-       <width>81</width>
+       <width>91</width>
        <height>71</height>
       </rect>
      </property>
@@ -145,9 +160,9 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>320</y>
+       <y>300</y>
        <width>71</width>
-       <height>41</height>
+       <height>31</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -161,11 +176,16 @@
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>360</x>
-      <y>80</y>
-      <width>121</width>
+      <x>380</x>
+      <y>70</y>
+      <width>131</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>Select Path to Backup</string>
@@ -215,7 +235,7 @@
      <rect>
       <x>230</x>
       <y>110</y>
-      <width>381</width>
+      <width>391</width>
       <height>192</height>
      </rect>
     </property>
@@ -223,36 +243,20 @@
    <widget class="QPushButton" name="bt_save">
     <property name="geometry">
      <rect>
-      <x>140</x>
+      <x>640</x>
       <y>360</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Save</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lb_path">
-    <property name="geometry">
-     <rect>
-      <x>230</x>
-      <y>360</y>
-      <width>381</width>
+      <width>71</width>
       <height>21</height>
      </rect>
     </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);</string>
-    </property>
     <property name="text">
-     <string/>
+     <string> Save</string>
     </property>
    </widget>
    <widget class="QPushButton" name="bt_target">
     <property name="geometry">
      <rect>
-      <x>360</x>
+      <x>380</x>
       <y>310</y>
       <width>101</width>
       <height>41</height>
@@ -285,7 +289,7 @@
     <property name="geometry">
      <rect>
       <x>231</x>
-      <y>460</y>
+      <y>470</y>
       <width>41</width>
       <height>22</height>
      </rect>
@@ -304,7 +308,7 @@
     <property name="geometry">
      <rect>
       <x>300</x>
-      <y>460</y>
+      <y>470</y>
       <width>42</width>
       <height>22</height>
      </rect>
@@ -320,7 +324,7 @@
     <property name="geometry">
      <rect>
       <x>360</x>
-      <y>460</y>
+      <y>470</y>
       <width>42</width>
       <height>22</height>
      </rect>
@@ -333,7 +337,7 @@
     <property name="geometry">
      <rect>
       <x>300</x>
-      <y>436</y>
+      <y>440</y>
       <width>21</width>
       <height>20</height>
      </rect>
@@ -348,24 +352,11 @@
       <x>230</x>
       <y>440</y>
       <width>47</width>
-      <height>13</height>
+      <height>21</height>
      </rect>
     </property>
     <property name="text">
      <string>Hour</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lb_month">
-    <property name="geometry">
-     <rect>
-      <x>360</x>
-      <y>430</y>
-      <width>31</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Month</string>
     </property>
    </widget>
    <widget class="QCheckBox" name="chk_compress">
@@ -390,17 +381,20 @@
    <widget class="QPushButton" name="bt_backup">
     <property name="geometry">
      <rect>
-      <x>360</x>
+      <x>380</x>
       <y>550</y>
       <width>101</width>
       <height>41</height>
      </rect>
     </property>
     <property name="text">
-     <string>Backup</string>
+     <string>  Backup!</string>
     </property>
    </widget>
    <widget class="QLabel" name="lb_files">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>190</x>
@@ -409,11 +403,11 @@
       <height>21</height>
      </rect>
     </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);</string>
-    </property>
     <property name="text">
-     <string/>
+     <string>1</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="lb_folders">
@@ -426,10 +420,13 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);</string>
+     <string notr="true"/>
     </property>
     <property name="text">
-     <string/>
+     <string>2</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="lb_size">
@@ -442,10 +439,75 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);</string>
+     <string notr="true"/>
     </property>
     <property name="text">
-     <string/>
+     <string>3</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>640</x>
+      <y>110</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Space used in cloud</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="lb_path">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>360</y>
+      <width>391</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="verticalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+    <property name="html">
+     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lb_month">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>440</y>
+      <width>31</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Month</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="bt_save_dates">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>470</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string> Save</string>
     </property>
    </widget>
   </widget>
@@ -462,7 +524,7 @@
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources>
-  <include location="recursos.qrc"/>
+  <include location="resources.qrc"/>
  </resources>
  <connections/>
 </ui>

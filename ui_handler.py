@@ -16,6 +16,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         QtWidgets.QMainWindow.__init__(self, *args, **kwargs)
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
+        self.setFixedSize(830,660)
+        # Set to 0 by default
+        self.lb_files.setText("0")
+        self.lb_folders.setText("0")
+        self.lb_size.setText("0")
         qss_file = open('theme.qss').read()
         app.setStyleSheet(qss_file)
         app.setWindowIcon(QIcon("Resources/icon.png"))
