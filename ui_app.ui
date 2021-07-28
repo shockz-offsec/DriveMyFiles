@@ -2835,6 +2835,9 @@ p, li { white-space: pre-wrap; }
     </property>
    </widget>
    <widget class="QPushButton" name="bt_save_dates">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>430</x>

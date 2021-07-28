@@ -36,7 +36,7 @@ def upload_drive(path):
 """Saves the credentials provided by the user for the use of gdrive
 *The file witch contains the credentials of gdrive will be placed in '../AppData/Roaming/.gdrive/'
 """
-def get_credentials():
+def get_credentials(token=None):
 
     args = ['gdrive\\gdrive.exe', 'about']
     p = None
@@ -44,9 +44,6 @@ def get_credentials():
         p = Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
     except Exception as e:
         logger.error("Cant execute the validation process of gdrive" + str(e))
-
-    print('https://accounts.google.com/o/oauth2/auth?access_type=offline&client_id=367116221053-7n0vf5akeru7on6o2fjinrecpdoe99eg.apps.googleusercontent.com&redirect_uri=urn%3Aietf%3Awg%3Aoauth%3A2.0%3Aoob&response_type=code&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive&state=state')
-    token = input("Introduce el token: ")
     
     p.stdin.write(str(token))
     

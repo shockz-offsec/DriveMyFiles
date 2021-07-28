@@ -896,6 +896,7 @@ class Ui_MainWindow(object):
         self.lb_month.setPalette(palette)
         self.lb_month.setObjectName("lb_month")
         self.bt_save_dates = QtWidgets.QPushButton(self.centralwidget)
+        self.bt_save_dates.setEnabled(False)
         self.bt_save_dates.setGeometry(QtCore.QRect(430, 470, 71, 21))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(169, 183, 198))

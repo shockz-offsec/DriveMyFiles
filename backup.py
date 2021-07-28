@@ -102,12 +102,8 @@ def recompile(make_compression=True):
     else:
         drive.upload_drive(dir_path)
 
-
 if __name__ == "__main__":
-    # execute this at the start of the script
-    if not os.path.exists('log'):
-        os.makedirs('log')
-    
+    pass
     # Test
     #recompile()
     #drive.get_credentials()

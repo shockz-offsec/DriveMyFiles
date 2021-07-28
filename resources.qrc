@@ -2,5 +2,6 @@
   <qresource prefix="DriveMyFiles">
     <file>resources/options.png</file>
     <file>resources/drive.png</file>
+    <file>resources/arrow_back.png</file>
   </qresource>
 </RCC>

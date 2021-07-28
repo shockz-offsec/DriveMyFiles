@@ -1,4 +1,4 @@
-import sys
+import sys,os
 import logging
 from logging.config import dictConfig
 
@@ -36,6 +36,9 @@ logging_config = dict(
     }
 )
 
+if not os.path.exists('log'):
+    os.makedirs('log')
+        
 dictConfig(logging_config)
 
 logger = logging.getLogger('logger')
