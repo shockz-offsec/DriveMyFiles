@@ -1,8 +1,4 @@
 {
-    "SPOTIFY": {
-        "EMAIL": true, 
-        "PASS": true
-    }, 
     "DIRECTORIES": [
         "C:\\",
         "C:\\"
@@ -14,13 +10,13 @@
         "MONTH": true
     }, 
     "DRIVE": {
-        "API_KEY": true, 
-        "EMAIL": true, 
-        "PASS": true
-    }, 
-    "GENERAL": {
         "AUTO_BACKUP": true, 
         "ENCRYPT": false,
-        "SPOTIFY": true
+        "COMPRESS": true,
+        "AUTHENTICATED": true
+    }, 
+    "GENERAL": {
+        "NUM_BACKUP": 0, 
+        "DELETE_BACKUP": false
     }
 }

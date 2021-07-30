@@ -6,13 +6,7 @@ from distutils.dir_util import copy_tree
 import zipfile
 from logger_settings import logger
 import drive
-
-"""Write into the json file"""
-def writing():
-    json_data = json.load(open('config.json','r'))
-    # Content..
-    with open('config.json', 'w') as outfile:
-        json.dump(json_data, outfile, indent=4,ensure_ascii=False)
+from json_handler import json_handler
 
 
 """Compress all the files recursively into a zipfile located in the temp dir
@@ -78,7 +72,7 @@ def recompile(make_compression=True):
 
     json_data = json.load(open('config.json', 'r'))
     lista = list(json_data["DIRECTORIES"])
-    
+
     # Name of the folder where the files are stored if not compressed
     now = datetime.datetime.now()
     dir_name = 'backupdrive' + now.strftime("_%d_%b_%Y_%H_%M_%S")
@@ -103,8 +97,7 @@ def recompile(make_compression=True):
         drive.upload_drive(dir_path)
 
 if __name__ == "__main__":
-    pass
+    print(json_handler.get_list("DIRECTORIES"))
     # Test
     #recompile()
-    #drive.get_credentials()
     #print(drive.get_size())

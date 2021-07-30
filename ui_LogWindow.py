@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_LogWindow(object):
     def setupUi(self, LogWindow):
         LogWindow.setObjectName("LogWindow")
-        LogWindow.resize(832, 661)
+        LogWindow.resize(780, 706)
         LogWindow.setFocusPolicy(QtCore.Qt.WheelFocus)
         LogWindow.setStyleSheet("")
         LogWindow.setInputMethodHints(QtCore.Qt.ImhNone)
@@ -107,7 +107,7 @@ class Ui_LogWindow(object):
         self.bt_log_viewer.setStyleSheet("")
         self.bt_log_viewer.setObjectName("bt_log_viewer")
         self.bt_back = QtWidgets.QPushButton(self.centralwidget)
-        self.bt_back.setGeometry(QtCore.QRect(770, 580, 41, 31))
+        self.bt_back.setGeometry(QtCore.QRect(710, 630, 41, 31))
         self.bt_back.setStyleSheet("image: url(:/DriveMyFiles/resources/arrow_back.png);")
         self.bt_back.setText("")
         self.bt_back.setObjectName("bt_back")
@@ -154,7 +154,7 @@ class Ui_LogWindow(object):
         self.list_log.setObjectName("list_log")
         LogWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(LogWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 832, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 780, 21))
         self.menubar.setObjectName("menubar")
         LogWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(LogWindow)

@@ -1,7 +1,7 @@
 from subprocess import Popen, PIPE
 import subprocess
 from logger_settings import logger
-import os
+import os,shutil
 
 
 """Uploads the files to google drive via gdrive
@@ -38,6 +38,11 @@ def upload_drive(path):
 """
 def get_credentials(token=None):
 
+    # If exists the folder where credentials are saved, we'll delete it to save the new cred
+    base = os.getenv('APPDATA')+"\\.gdrive"
+    if os.path.exists(base):
+        shutil.rmtree(base, ignore_errors=False, onerror=None)
+    
     args = ['gdrive\\gdrive.exe', 'about']
     p = None
     try:
@@ -51,8 +56,10 @@ def get_credentials(token=None):
     
     if error:
         logger.error("Not valid token")
+        return False
     else:
         logger.info("Credentials saved")
+        return True
        
 
 """Download the files from google drive to local

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>832</width>
-    <height>661</height>
+    <width>780</width>
+    <height>706</height>
    </rect>
   </property>
   <property name="focusPolicy">
@@ -312,7 +312,7 @@
     <property name="geometry">
      <rect>
       <x>260</x>
-      <y>210</y>
+      <y>220</y>
       <width>321</width>
       <height>21</height>
      </rect>
@@ -436,7 +436,7 @@
      <rect>
       <x>190</x>
       <y>100</y>
-      <width>501</width>
+      <width>601</width>
       <height>21</height>
      </rect>
     </property>
@@ -479,20 +479,20 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>12</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
     <property name="text">
-     <string>1. Click on the following link and select the account you want to use</string>
+     <string>1. Click on the following link, select your account and accept permissions</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_6">
     <property name="geometry">
      <rect>
       <x>310</x>
-      <y>130</y>
+      <y>140</y>
       <width>231</width>
       <height>21</height>
      </rect>
@@ -637,7 +637,7 @@
     <property name="geometry">
      <rect>
       <x>190</x>
-      <y>170</y>
+      <y>180</y>
       <width>321</width>
       <height>21</height>
      </rect>
@@ -694,7 +694,7 @@
     <property name="geometry">
      <rect>
       <x>190</x>
-      <y>250</y>
+      <y>260</y>
       <width>161</width>
       <height>21</height>
      </rect>
@@ -747,11 +747,11 @@
      <string>3. Press the button</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="bt_save">
+   <widget class="QPushButton" name="bt_save_cred">
     <property name="geometry">
      <rect>
       <x>360</x>
-      <y>280</y>
+      <y>290</y>
       <width>91</width>
       <height>23</height>
      </rect>
@@ -768,8 +768,8 @@
    <widget class="QPushButton" name="bt_back">
     <property name="geometry">
      <rect>
-      <x>770</x>
-      <y>580</y>
+      <x>720</x>
+      <y>630</y>
       <width>41</width>
       <height>31</height>
      </rect>
@@ -787,7 +787,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>832</width>
+     <width>780</width>
      <height>21</height>
     </rect>
    </property>

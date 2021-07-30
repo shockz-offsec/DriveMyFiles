@@ -16,7 +16,10 @@ QColorDialog{
 }
 QTextEdit {
 	background-color:#1e1d23;
-	color: #a9b7c6;
+	color: white;
+}
+QMessageBox QLabel  {
+	color: white;
 }
 QPlainTextEdit {
 	selection-background-color:#007b50;

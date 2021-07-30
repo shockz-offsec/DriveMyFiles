@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>832</width>
-    <height>661</height>
+    <width>779</width>
+    <height>706</height>
    </rect>
   </property>
   <property name="focusPolicy">
@@ -782,7 +782,7 @@
      </palette>
     </property>
    </widget>
-   <widget class="QPushButton" name="bt_save">
+   <widget class="QPushButton" name="bt_save_path">
     <property name="geometry">
      <rect>
       <x>640</x>
@@ -2968,13 +2968,63 @@ p, li { white-space: pre-wrap; }
      <string> Save</string>
     </property>
    </widget>
+   <widget class="QProgressBar" name="pr_backup">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>610</y>
+      <width>201</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="palette">
+     <palette>
+      <active>
+       <colorrole role="WindowText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>169</red>
+          <green>183</green>
+          <blue>198</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </active>
+      <inactive>
+       <colorrole role="WindowText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>169</red>
+          <green>183</green>
+          <blue>198</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </inactive>
+      <disabled>
+       <colorrole role="WindowText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>120</red>
+          <green>120</green>
+          <blue>120</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </disabled>
+     </palette>
+    </property>
+    <property name="value">
+     <number>24</number>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>832</width>
+     <width>779</width>
      <height>21</height>
     </rect>
    </property>
