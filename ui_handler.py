@@ -1,3 +1,5 @@
+from json_handler import json_handler
+from logging import exception
 from ui_OptionsWindow import Ui_OptionsWindow
 from ui_LogWindow import Ui_LogWindow
 from ui_AuthWindow import Ui_AuthWindow
@@ -6,8 +8,12 @@ from PyQt5.QtWidgets import QFileDialog, QAction, QTableWidgetItem, QPushButton,
 from PyQt5.QtGui import QIcon, QPalette
 from PyQt5.uic.properties import QtWidgets
 from ui_MainWindow import *
+from PyQt5.QtWidgets import *
 from qtpy.QtWidgets import QApplication, QWidget
 import sys
+import os
+from utils import get_size
+from os.path import expanduser
 import resources
 from PyQt5.Qt import QUrl, QDesktopServices
 import drive,json
@@ -43,6 +49,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         for ruta in lista:
             self.list_Paths.addItem(ruta)
         
+        size = get_size()
+        self.lb_size.setText(size)
+        
+        
         # Event handlers
         self.list_Paths.itemDoubleClicked.connect(self.editItem)
         # Enable automatic
@@ -54,6 +64,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.link_auth.clicked.connect(self.startAuthWindow)
         self.bt_log_viewer.clicked.connect(self.startLogWindow)
         self.bt_options.clicked.connect(self.startOptionsWindow)
+        self.bt_target.clicked.connect(self.select_path)
+        self.bt_save_path.clicked.connect(self.save_path)
         
     def backup(self):
         backup.recompile(self.chk_compress.isChecked())
@@ -69,8 +81,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
     def editItem(self, item):
         #QMessageBox.information(self, "Info", item.text())
-
-        self.lb_path.setText(item.text())
+        self.lb_path.setText(os.path.normpath(item.text()))
         info = item.text()
         self.bt_save_path.clicked.connect(self.modifyItem)
         
@@ -91,7 +102,38 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.hide()# hide this window
         self.ui = OptionsWindow()# Change to the auth window
         self.ui.show()# is displayed via auth window
-
+        
+    ##Selector of path    
+    def select_path(self):
+        """Function to select de path of the file"""
+        try:
+            button = self.sender()
+            
+            if button:
+                file = QFileDialog.getExistingDirectory(self, "Folder to backup", expanduser("~"))
+                print("Path selected: ", file)
+                self.lb_path.setPlainText(os.path.normpath(file))
+                return file
+        except Exception as e:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Critical)
+            msg.setText("Path of the file not valid")
+            msg.setWindowTitle("Error")
+            msg.exec_()
+            return None    
+    
+    def save_path(self):
+        path = os.path.normpath(self.lb_path.toPlainText())
+        
+        if path:
+            self.list_Paths.addItem(path)           
+            json_data = json_handler()
+            json_data.add_field_list("DIRECTORIES",path)
+            size = get_size()
+            self.lb_size.setText(size)
+            QMessageBox.information(self, "Info", "Path saved")
+        else:
+            QMessageBox.information(self, "Info", "Select a path folder")   
 
 
 class AuthWindow(QtWidgets.QMainWindow, Ui_AuthWindow):
@@ -107,9 +149,7 @@ class AuthWindow(QtWidgets.QMainWindow, Ui_AuthWindow):
         # Theme
         qss_file = open('theme.qss').read()
         app.setStyleSheet(qss_file)
-        app.setWindowIcon(QIcon("Resources/icon.png"))
-        
-        
+
         # view handler
         self.bt_back.clicked.connect(self.backToMain)
         self.bt_drive.clicked.connect(self.backToMain)

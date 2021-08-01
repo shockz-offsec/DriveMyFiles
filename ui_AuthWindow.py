@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '.\auth_ui.ui'
+# Form implementation generated from reading ui file 'auth_ui.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #
@@ -76,9 +76,6 @@ class Ui_AuthWindow(object):
         brush = QtGui.QBrush(QtGui.QColor(169, 183, 198))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(169, 183, 198, 128))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.PlaceholderText, brush)
         brush = QtGui.QBrush(QtGui.QColor(169, 183, 198))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.WindowText, brush)
@@ -88,9 +85,6 @@ class Ui_AuthWindow(object):
         brush = QtGui.QBrush(QtGui.QColor(169, 183, 198))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(169, 183, 198, 128))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.PlaceholderText, brush)
         brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.WindowText, brush)
@@ -100,9 +94,6 @@ class Ui_AuthWindow(object):
         brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0, 128))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.PlaceholderText, brush)
         self.bt_log_viewer.setPalette(palette)
         self.bt_log_viewer.setStyleSheet("")
         self.bt_log_viewer.setObjectName("bt_log_viewer")
@@ -175,9 +166,6 @@ class Ui_AuthWindow(object):
         brush = QtGui.QBrush(QtGui.QColor(85, 170, 255))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(85, 170, 255, 128))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.PlaceholderText, brush)
         brush = QtGui.QBrush(QtGui.QColor(85, 170, 255))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.WindowText, brush)
@@ -187,9 +175,6 @@ class Ui_AuthWindow(object):
         brush = QtGui.QBrush(QtGui.QColor(85, 170, 255))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(85, 170, 255, 128))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.PlaceholderText, brush)
         brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.WindowText, brush)
@@ -199,16 +184,16 @@ class Ui_AuthWindow(object):
         brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0, 128))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.PlaceholderText, brush)
         self.label_6.setPalette(palette)
         font = QtGui.QFont()
         font.setPointSize(12)
         self.label_6.setFont(font)
-        self.label_6.setTextFormat(QtCore.Qt.PlainText)
+        self.label_6.setMouseTracking(True)
+        self.label_6.setTabletTracking(True)
+        self.label_6.setAcceptDrops(False)
+        self.label_6.setTextFormat(QtCore.Qt.RichText)
         self.label_6.setOpenExternalLinks(True)
-        self.label_6.setTextInteractionFlags(QtCore.Qt.TextBrowserInteraction)
+        self.label_6.setTextInteractionFlags(QtCore.Qt.LinksAccessibleByKeyboard|QtCore.Qt.LinksAccessibleByMouse|QtCore.Qt.TextBrowserInteraction|QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
         self.label_6.setObjectName("label_6")
         self.label_7 = QtWidgets.QLabel(self.centralwidget)
         self.label_7.setGeometry(QtCore.QRect(190, 180, 321, 21))
@@ -280,11 +265,11 @@ class Ui_AuthWindow(object):
         self.label.setText(_translate("AuthWindow", "In order to authenticate yourself and make your backups you must"))
         self.label_4.setText(_translate("AuthWindow", "follow the following steps:"))
         self.label_5.setText(_translate("AuthWindow", "1. Click on the following link, select your account and accept permissions"))
-        self.label_6.setText(_translate("AuthWindow", "https://tinyurl.com/drivemyfiles"))
+        self.label_6.setToolTip(_translate("AuthWindow", "<html><head/><body><p><a href=\"https://tinyurl.com/drivemyfiles\"><span style=\" text-decoration: underline; color:#0000ff;\">https://tinyurl.com/drivemyfiles</span></a></p></body></html>"))
+        self.label_6.setText(_translate("AuthWindow", "<html><head/><body><p><a href=\"https://tinyurl.com/drivemyfiles//\"><span style=\" text-decoration: underline; color:#00aaff;\">https://tinyurl.com/drivemyfiles</span></a></p></body></html>"))
         self.label_7.setText(_translate("AuthWindow", "2. Paste the code in the following field"))
         self.label_8.setText(_translate("AuthWindow", "3. Press the button"))
         self.bt_save_cred.setText(_translate("AuthWindow", "Authenticate"))
-
 
 
 if __name__ == "__main__":
