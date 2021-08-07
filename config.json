@@ -1,22 +1,17 @@
 {
-    "DIRECTORIES": [
-        "C:\\",
-        "C:\\"
-    ], 
+    "DIRECTORIES": [],
     "TIMES": {
-        "MINUTE": true, 
-        "DAY": true, 
-        "HOUR": true, 
-        "MONTH": true
-    }, 
+        "DAY": 1,
+        "HOUR": 1,
+        "MONTH": 1
+    },
     "DRIVE": {
-        "AUTO_BACKUP": true, 
-        "ENCRYPT": false,
+        "AUTO_BACKUP": false,
         "COMPRESS": true,
         "AUTHENTICATED": true
-    }, 
-    "GENERAL": {
-        "NUM_BACKUP": 0, 
+    },
+    "OPTIONS": {
+        "NUM_BACKUP": 1,
         "DELETE_BACKUP": false
     }
 }

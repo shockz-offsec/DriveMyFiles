@@ -1,5 +1,4 @@
 import os
-import json
 import shutil
 import datetime
 from distutils.dir_util import copy_tree
@@ -70,8 +69,13 @@ Args:
 """
 def recompile(make_compression=True):
 
-    json_data = json.load(open('config.json', 'r'))
-    lista = list(json_data["DIRECTORIES"])
+    json_data = json_handler()
+    
+    if not json_data.get_list("DRIVE", "AUTHENTICATED"):
+        logger.warning("No authenticated")
+        return False
+    
+    lista = json_data.get_list("DIRECTORIES")
 
     # Name of the folder where the files are stored if not compressed
     now = datetime.datetime.now()
@@ -95,9 +99,5 @@ def recompile(make_compression=True):
         compress(dir_name, dir_path)
     else:
         drive.upload_drive(dir_path)
-
-if __name__ == "__main__":
-    print(json_handler.get_list("DIRECTORIES"))
-    # Test
-    #recompile()
-    #print(drive.get_size())
+        
+    return True

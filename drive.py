@@ -2,6 +2,7 @@ from subprocess import Popen, PIPE
 import subprocess
 from logger_settings import logger
 import os,shutil
+from json_handler import json_handler
 
 
 """Uploads the files to google drive via gdrive
@@ -87,6 +88,11 @@ Returns: used space, free space and total size of the google drive account respe
 """
 def get_size():
     
+    json_data = json_handler()
+    if not json_data.get_list("DRIVE","AUTHENTICATED"):
+        logger.warning("No authenticated")
+        return "0 GB", "0 GB", "0 GB", 0
+    
     args = ['gdrive\\gdrive.exe', 'about']
     p = None
     try:
@@ -103,9 +109,8 @@ def get_size():
     
     # Get the relevant info from the output
     x = [item.split(': ') for item in out.split('\n')]  
-    
     # Used space, free space, total space
-    return x[1][1].split(' '), x[2][1].split(' '), x[3][1].split(' ')
+    return x[1][1], x[2][1], x[3][1], get_percent(x[1][1].split(" "), x[3][1].split(" "))
 
 
 """This method takes care of deleting backups after a certain time or under a user-specified backup limit
@@ -114,3 +119,11 @@ Args:
 """
 def del_backup(name):
     pass
+
+"""Auxiliar method which returns the percent of the cloud size left
+Args:
+    used: sized used
+    total: total sized
+"""
+def get_percent(used, total):
+    return round(float(used[0])/float(total[0])*100)

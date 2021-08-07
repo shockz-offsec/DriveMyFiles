@@ -1,23 +1,30 @@
 import os
-import json
 from logger_settings import logger
+from json_handler import json_handler
 
-"""Calculate the size of the files or the files of a directory"""
+"""Calculate the size of the files or the files of a directory
+   Returns: size of the files/dirs, number of files and number of folders
+"""
 def get_size():
-    json_data = json.load(open('config.json','r'))
-    lista = list(json_data["DIRECTORIES"])
+    
+    json_data = json_handler()
+    lista = json_data.get_list("DIRECTORIES")
+    num_files = 0
+    num_dir = 0
     total = 0
     logger.info("Starting to calculate size of the files ...")
     for ruta in lista:
         if os.path.exists(ruta):
             if os.path.isdir(ruta):
+                num_dir += 1
                 #print(get_size_format(get_directory_size(ruta)))
                 total +=get_directory_size(ruta)
             else:
+                num_files += 1
                 #print(get_size_format(os.path.getsize(ruta)))
                 total +=os.path.getsize(ruta)
     logger.info("Calculated size ...")
-    return get_size_format(total)
+    return get_size_format(total), str(num_files), str(num_dir)
 
 """Calculate the size of the files  of a directory"""
 def get_directory_size(directory):
@@ -41,7 +48,7 @@ def get_size_format(b,factor=1024):
     logger.info("Transforming to a more expressive unit ...")
     for unit in ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB"]:
         if b < factor:
-            return f"{b:.2f}{unit}"
+            return f"{b:.2f} {unit}"
         b/= factor
     return f"{b:.2f}Y"
 

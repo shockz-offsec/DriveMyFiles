@@ -121,6 +121,7 @@ class Ui_OptionsWindow(object):
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.WindowText, brush)
         self.chk_delete.setPalette(palette)
         self.chk_delete.setInputMethodHints(QtCore.Qt.ImhNone)
+        self.chk_delete.setChecked(False)
         self.chk_delete.setObjectName("chk_delete")
         self.sp_number = QtWidgets.QSpinBox(self.centralwidget)
         self.sp_number.setEnabled(False)
@@ -155,7 +156,7 @@ class Ui_OptionsWindow(object):
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.PlaceholderText, brush)
         self.sp_number.setPalette(palette)
         self.sp_number.setSuffix("")
-        self.sp_number.setMaximum(24)
+        self.sp_number.setMaximum(99)
         self.sp_number.setObjectName("sp_number")
         self.lb_last_backup = QtWidgets.QLabel(self.centralwidget)
         self.lb_last_backup.setEnabled(False)
@@ -267,7 +268,6 @@ class Ui_OptionsWindow(object):
         self.chk_delete.setText(_translate("OptionsWindow", "Delete backups"))
         self.lb_last_backup.setText(_translate("OptionsWindow", "last backups to save"))
         self.bt_number_backups.setText(_translate("OptionsWindow", " Save"))
-
 
 
 if __name__ == "__main__":

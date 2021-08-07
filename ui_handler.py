@@ -3,7 +3,7 @@ from logging import exception
 from ui_OptionsWindow import Ui_OptionsWindow
 from ui_LogWindow import Ui_LogWindow
 from ui_AuthWindow import Ui_AuthWindow
-from PyQt5.QtCore import QModelIndex
+from PyQt5.QtCore import QEvent, QModelIndex
 from PyQt5.QtWidgets import QFileDialog, QAction, QTableWidgetItem, QPushButton, QScrollBar, QWidget, QMessageBox
 from PyQt5.QtGui import QIcon, QPalette
 from PyQt5.uic.properties import QtWidgets
@@ -37,21 +37,40 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         app.setWindowIcon(QIcon("Resources/icon.png"))
         
         # Set 0 by default
-        self.lb_files.setText("0")
-        self.lb_folders.setText("0")
-        self.lb_size.setText("0")
-        self.pr_size.setValue(0)
         self.pr_backup.setValue(0)
         
-        # Add items
-        json_data = json.load(open('config.json', 'r'))
-        lista = list(json_data["DIRECTORIES"])
-        for ruta in lista:
-            self.list_Paths.addItem(ruta)
-        
-        size = get_size()
+        # Getting an instance of json_handler
+        json_data = json_handler()
+        array = json_data.get_list("DIRECTORIES")
+        # Setting values to ListView
+        for route in array:
+            self.list_Paths.addItem(route)
+        # Setting values to labels
+        size, num_files, num_folders = get_size()
+        self.lb_files.setText(num_files)
+        self.lb_folders.setText(num_folders)
         self.lb_size.setText(size)
+        # Cloud Size
+        used, free, total, percent = drive.get_size()
+        self.lb_used.setText(used)
+        self.lb_free.setText(free)
+        self.lb_total.setText(total)
+        self.pr_size.setMinimum(0)
+        self.pr_size.setMaximum(100)
+        self.pr_size.setValue(percent)
         
+        # Compress checkbox
+        self.chk_compress.setChecked(json_data.get_list("DRIVE","COMPRESS"))
+        # Automatic Backup
+        state_auto = json_data.get_list("DRIVE","AUTO_BACKUP")
+        self.chk_automatic.setChecked(state_auto)
+        self.sp_day.setEnabled(state_auto)
+        self.sp_day.setValue(json_data.get_list("TIMES","DAY"))
+        self.sp_hour.setEnabled(state_auto)
+        self.sp_hour.setValue(json_data.get_list("TIMES","HOUR"))
+        self.sp_month.setEnabled(state_auto)
+        self.sp_month.setValue(json_data.get_list("TIMES","MONTH"))
+        self.bt_save_dates.setEnabled(state_auto) 
         
         # Event handlers
         self.list_Paths.itemDoubleClicked.connect(self.editItem)
@@ -66,27 +85,29 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.bt_options.clicked.connect(self.startOptionsWindow)
         self.bt_target.clicked.connect(self.select_path)
         self.bt_save_path.clicked.connect(self.save_path)
+ 
         
     def backup(self):
-        backup.recompile(self.chk_compress.isChecked())
+        output = backup.recompile(self.chk_compress.isChecked())
+        if not output:
+            QMessageBox.warning(self, "Warning", "You need to be authenticated")
+        else:
+            QMessageBox.information(self, "Info", "Backup Completed")
         
     def automatic(self):
+        json_data = json_handler()
         state = True
         if not self.chk_automatic.isChecked():
            state = False
         self.sp_day.setEnabled(state)
         self.sp_hour.setEnabled(state)
         self.sp_month.setEnabled(state)
-        self.bt_save_dates.setEnabled(state)  
+        self.bt_save_dates.setEnabled(state)
+        json_data.write_field("DRIVE",state,"AUTO_BACKUP")  
         
     def editItem(self, item):
         #QMessageBox.information(self, "Info", item.text())
         self.lb_path.setText(os.path.normpath(item.text()))
-        info = item.text()
-        self.bt_save_path.clicked.connect(self.modifyItem)
-        
-    def modifyItem(self):
-        QMessageBox.information(self, "Info", self.lb_path.toPlainText())
         
     def startAuthWindow(self):
         self.hide()# hide this window
@@ -129,7 +150,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.list_Paths.addItem(path)           
             json_data = json_handler()
             json_data.add_field_list("DIRECTORIES",path)
-            size = get_size()
+            size, num_files, num_folders = get_size()
             self.lb_size.setText(size)
             QMessageBox.information(self, "Info", "Path saved")
         else:
@@ -163,6 +184,8 @@ class AuthWindow(QtWidgets.QMainWindow, Ui_AuthWindow):
 
         if cred:
             QMessageBox.information(self, "Info", "Credentials saved")
+            json_data = json_handler()
+            json_data.write_field("DRIVE",True,"AUTHENTICATED")
         else:
             QMessageBox.information(self, "Info", "Invalid credentials")
     
@@ -237,12 +260,31 @@ class OptionsWindow(QtWidgets.QMainWindow, Ui_OptionsWindow):
         app.setStyleSheet(qss_file)
         app.setWindowIcon(QIcon("Resources/icon.png"))
         
+        #Getting a instance of json_handler
+        json_data = json_handler()
+        #Setting values
+        state_auto = json_data.get_list("OPTIONS","DELETE_BACKUP")
+        self.chk_delete.setChecked(state_auto)
+        self.sp_number.setEnabled(state_auto)
+        self.bt_number_backups.setEnabled(state_auto)
+        self.sp_number.setValue(json_data.get_list("OPTIONS","NUM_BACKUP"))
         
         # view handler
         self.bt_back.clicked.connect(self.backToMain)
         self.bt_log_viewer.clicked.connect(self.reload)
         self.bt_drive.clicked.connect(self.backToMain)
-        
+        # Enable delete
+        self.chk_delete.toggled.connect(self.delete_toggle)
+    
+    def delete_toggle(self):
+        json_data = json_handler()
+        state = True
+        if not self.chk_delete.isChecked():
+           state = False
+        self.sp_number.setEnabled(state)
+        self.bt_number_backups.setEnabled(state)
+        json_data.write_field("OPTIONS",state,"DELETE_BACKUP")
+    
     def reload(self):
         self.hide()# hide this window
         self.ui = LogWindow()# Change to the auth window

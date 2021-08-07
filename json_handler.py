@@ -5,17 +5,10 @@ class json_handler:
     def __init__(self,filename="config.json"):
         self.filename = filename
 
-    """Write into the json file"""
-    """
-    @staticmethod
-    def writing(json_data):
-        json_data = json.load(open('config.json','r'))
-        # Content..
-        with open(self.filename, 'w') as outfile:
-            json.dump(json_data, outfile, indent=4, ensure_ascii=False)
-    """     
     def get_list(self,section, subsection=None):
         json_data = json.load(open(self.filename, 'r'))
+        if subsection:
+            return json_data[section][subsection]
         return list(json_data[section])
     
     def write_field(self,section,content,subsection=None):
