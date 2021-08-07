@@ -8,7 +8,7 @@
     "DRIVE": {
         "AUTO_BACKUP": false,
         "COMPRESS": true,
-        "AUTHENTICATED": true
+        "AUTHENTICATED": false
     },
     "OPTIONS": {
         "NUM_BACKUP": 1,
