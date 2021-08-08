@@ -46,18 +46,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         for route in array:
             self.list_Paths.addItem(route)
         # Setting values to labels
-        size, num_files, num_folders = get_size()
-        self.lb_files.setText(num_files)
-        self.lb_folders.setText(num_folders)
-        self.lb_size.setText(size)
-        # Cloud Size
-        used, free, total, percent = drive.get_size()
-        self.lb_used.setText(used)
-        self.lb_free.setText(free)
-        self.lb_total.setText(total)
-        self.pr_size.setMinimum(0)
-        self.pr_size.setMaximum(100)
-        self.pr_size.setValue(percent)
+        self.update_sizes()
         
         # Compress checkbox
         self.chk_compress.setChecked(json_data.get_list("DRIVE","COMPRESS"))
@@ -73,7 +62,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.bt_save_dates.setEnabled(state_auto) 
         
         # Event handlers
-        self.list_Paths.itemDoubleClicked.connect(self.editItem)
+        self.list_Paths.customContextMenuRequested.connect(self.editItem)
         # Enable automatic
         self.chk_automatic.toggled.connect(self.automatic)
         # Backup
@@ -86,6 +75,21 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.bt_target.clicked.connect(self.select_path)
         self.bt_save_path.clicked.connect(self.save_path)
  
+
+    def update_sizes(self):
+        # Setting values to labels
+        size, num_files, num_folders = get_size()
+        self.lb_files.setText(num_files)
+        self.lb_folders.setText(num_folders)
+        self.lb_size.setText(size)
+        # Cloud Size
+        used, free, total, percent = drive.get_size()
+        self.lb_used.setText(used)
+        self.lb_free.setText(free)
+        self.lb_total.setText(total)
+        self.pr_size.setMinimum(0)
+        self.pr_size.setMaximum(100)
+        self.pr_size.setValue(percent)
         
     def backup(self):
         output = backup.recompile(self.chk_compress.isChecked())
@@ -107,7 +111,27 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
     def editItem(self, item):
         #QMessageBox.information(self, "Info", item.text())
-        self.lb_path.setText(os.path.normpath(item.text()))
+        if(self.list_Paths.itemAt(item)):
+            contextMenu = QMenu(self)
+            editAct = contextMenu.addAction("Edit")
+            deleteAct = contextMenu.addAction("Delete")
+            action = contextMenu.exec_(self.mapToParent(item))
+            if action == editAct:
+                file = self.select_path()
+                if file and self.not_exists_path(file):
+                    self.list_Paths.currentItem().setText(os.path.normpath(file))
+                    json_data = json_handler()
+                    json_data.edit_field_list("DIRECTORIES", self.list_Paths.row(self.list_Paths.itemAt(item)), os.path.normpath(file))
+                    self.update_sizes()
+                else:
+                  QMessageBox.warning(self, "Warning", "The directory or file already exists")  
+            if action == deleteAct:
+                self.list_Paths.takeItem(self.list_Paths.currentRow())
+                json_data = json_handler()
+                json_data.remove_field_list("DIRECTORIES",self.list_Paths.row(self.list_Paths.itemAt(item)))
+                self.update_sizes()
+                
+        
         
     def startAuthWindow(self):
         self.hide()# hide this window
@@ -133,8 +157,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             if button:
                 file = QFileDialog.getExistingDirectory(self, "Folder to backup", expanduser("~"))
                 print("Path selected: ", file)
-                self.lb_path.setPlainText(os.path.normpath(file))
-                return file
+                if self.not_exists_path(file):
+                    self.lb_path.setPlainText(os.path.normpath(file))
+                    return file
+                else:
+                    QMessageBox.warning(self, "Warning", "The directory or file already exists")
         except Exception as e:
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Critical)
@@ -146,16 +173,21 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def save_path(self):
         path = os.path.normpath(self.lb_path.toPlainText())
         
-        if path:
+        if path and self.not_exists_path(path):
             self.list_Paths.addItem(path)           
             json_data = json_handler()
             json_data.add_field_list("DIRECTORIES",path)
-            size, num_files, num_folders = get_size()
-            self.lb_size.setText(size)
+            self.update_sizes()
             QMessageBox.information(self, "Info", "Path saved")
         else:
-            QMessageBox.information(self, "Info", "Select a path folder")   
-
+            QMessageBox.information(self, "Info", "Select a path folder that doesn't exists")   
+            
+    def not_exists_path(self,path):
+        notExists = True
+        for i in range(self.list_Paths.count()):
+            if self.list_Paths.item(i).text() == os.path.normpath(path):
+                notExists = False
+        return notExists
 
 class AuthWindow(QtWidgets.QMainWindow, Ui_AuthWindow):
     
@@ -275,6 +307,7 @@ class OptionsWindow(QtWidgets.QMainWindow, Ui_OptionsWindow):
         self.bt_drive.clicked.connect(self.backToMain)
         # Enable delete
         self.chk_delete.toggled.connect(self.delete_toggle)
+        self.bt_number_backups.clicked.connect(self.save_backups)
     
     def delete_toggle(self):
         json_data = json_handler()
@@ -284,6 +317,11 @@ class OptionsWindow(QtWidgets.QMainWindow, Ui_OptionsWindow):
         self.sp_number.setEnabled(state)
         self.bt_number_backups.setEnabled(state)
         json_data.write_field("OPTIONS",state,"DELETE_BACKUP")
+        
+    def save_backups(self):
+        json_data = json_handler()
+        json_data.write_field("OPTIONS",int(self.sp_number.text()),"NUM_BACKUP")
+        QMessageBox.information(self, "Info", "Backup options saved")
     
     def reload(self):
         self.hide()# hide this window

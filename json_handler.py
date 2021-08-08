@@ -41,3 +41,25 @@ class json_handler:
 
         with open(self.filename, 'w') as f:
             json.dump(json_data, f,indent=4, ensure_ascii=False) 
+    
+    def remove_field_list(self,section,number,subsection=None):
+        with open(self.filename) as outfile:
+            data = json.load(outfile)
+            if subsection:
+                del data[section][subsection][number]
+            else:
+                del data[section][number]
+                
+        with open(self.filename, "w") as outfile:
+            json.dump(data, outfile,indent=4, ensure_ascii=False) 
+    
+    def edit_field_list(self,section,number,content,subsection=None):
+        with open(self.filename) as outfile:
+            data = json.load(outfile)
+            if subsection:
+                data[section][subsection][number] = content
+            else:
+                data[section][number] = content
+                
+        with open(self.filename, "w") as outfile:
+            json.dump(data, outfile,indent=4, ensure_ascii=False)     
