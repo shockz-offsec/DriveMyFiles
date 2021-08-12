@@ -16,8 +16,9 @@ from utils import get_size
 from os.path import expanduser
 import resources
 from PyQt5.Qt import QUrl, QDesktopServices
-import drive,json
+import drive
 import backup
+import re
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     """Class to relate the functions of the lower layers to the interface elements"""
@@ -118,13 +119,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             action = contextMenu.exec_(self.mapToParent(item))
             if action == editAct:
                 file = self.select_path()
+                print(file)
                 if file and self.not_exists_path(file):
                     self.list_Paths.currentItem().setText(os.path.normpath(file))
                     json_data = json_handler()
                     json_data.edit_field_list("DIRECTORIES", self.list_Paths.row(self.list_Paths.itemAt(item)), os.path.normpath(file))
                     self.update_sizes()
+                elif not file:
+                    return None
                 else:
-                  QMessageBox.warning(self, "Warning", "The directory or file already exists")  
+                    QMessageBox.warning(self, "Warning", "The directory or file already exists")  
             if action == deleteAct:
                 self.list_Paths.takeItem(self.list_Paths.currentRow())
                 json_data = json_handler()
@@ -156,8 +160,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             
             if button:
                 file = QFileDialog.getExistingDirectory(self, "Folder to backup", expanduser("~"))
-                print("Path selected: ", file)
-                if self.not_exists_path(file):
+                
+                if not self.valid_path(file):
+                    return None
+                elif self.not_exists_path(file):
+                    print("Path selected: ", file)
                     self.lb_path.setPlainText(os.path.normpath(file))
                     return file
                 else:
@@ -173,7 +180,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def save_path(self):
         path = os.path.normpath(self.lb_path.toPlainText())
         
-        if path and self.not_exists_path(path):
+        if not self.valid_path(path):
+            QMessageBox.information(self, "Warning", "Select a correct path folder")   
+        elif path and self.not_exists_path(path):
             self.list_Paths.addItem(path)           
             json_data = json_handler()
             json_data.add_field_list("DIRECTORIES",path)
@@ -188,6 +197,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             if self.list_Paths.item(i).text() == os.path.normpath(path):
                 notExists = False
         return notExists
+    
+    def valid_path(self,path):
+        valid = True
+        if re.match("/^$|\s+/|\.+",path) or not os.path.isdir(path):
+            valid = False
+        return valid
 
 class AuthWindow(QtWidgets.QMainWindow, Ui_AuthWindow):
     
