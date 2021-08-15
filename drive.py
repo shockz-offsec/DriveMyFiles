@@ -61,7 +61,18 @@ def get_credentials(token=None):
     else:
         logger.info("Credentials saved")
         return True
-       
+     
+"""Check if there's credentials in the computer, modifying the parameter in config's file according to the result
+"""       
+def auth_status():
+    base = os.getenv('APPDATA')+"\\.gdrive"
+    json_data = json_handler()
+
+    if os.path.exists(base):
+        json_data.write_field("DRIVE", True, "AUTHENTICATED")
+    else:
+        json_data.write_field("DRIVE", False, "AUTHENTICATED")
+    
 
 """Download the files from google drive to local
 Args:

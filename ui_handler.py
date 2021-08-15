@@ -3,7 +3,7 @@ from logging import exception
 from ui_OptionsWindow import Ui_OptionsWindow
 from ui_LogWindow import Ui_LogWindow
 from ui_AuthWindow import Ui_AuthWindow
-from PyQt5.QtCore import QEvent, QModelIndex
+from PyQt5.QtCore import QEvent, QModelIndex, QPoint
 from PyQt5.QtWidgets import QFileDialog, QAction, QTableWidgetItem, QPushButton, QScrollBar, QWidget, QMessageBox
 from PyQt5.QtGui import QIcon, QPalette
 from PyQt5.uic.properties import QtWidgets
@@ -36,6 +36,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         qss_file = open('theme.qss').read()
         app.setStyleSheet(qss_file)
         app.setWindowIcon(QIcon("Resources/icon.png"))
+        
+        # AUTH_status
+        drive.auth_status()
         
         # Set 0 by default
         self.pr_backup.setValue(0)
@@ -116,7 +119,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             contextMenu = QMenu(self)
             editAct = contextMenu.addAction("Edit")
             deleteAct = contextMenu.addAction("Delete")
-            action = contextMenu.exec_(self.mapToParent(item))
+            action = contextMenu.exec_(QtGui.QCursor().pos())
             if action == editAct:
                 file = self.select_path()
                 print(file)
@@ -135,8 +138,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 json_data.remove_field_list("DIRECTORIES",self.list_Paths.row(self.list_Paths.itemAt(item)))
                 self.update_sizes()
                 
-        
-        
     def startAuthWindow(self):
         self.hide()# hide this window
         self.ui = AuthWindow()# Change to the auth window
