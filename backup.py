@@ -67,7 +67,7 @@ def clean(temp_dir):
 Args:
     make_compression: True indicates that we want to compress, False indicates that we don't want to compress
 """
-def recompile(make_compression=True):
+def recompile(update_pr):
 
     json_data = json_handler()
     
@@ -82,22 +82,30 @@ def recompile(make_compression=True):
     dir_name = 'backupdrive' + now.strftime("_%d_%b_%Y_%H_%M_%S")
     dir_path = 'Temp/' + dir_name
     
+    update_pr(percent=15)
+    
     if not os.path.exists('Temp'):
         os.makedirs('Temp')
         # A container folder is created for each copy.
         os.makedirs(dir_path)
+    update_pr(percent=37)
     logger.info("Copying files...")
     for ruta in lista:
         if os.path.exists(ruta):
             if os.path.isdir(ruta):
-                copy_tree(str(ruta), dir_path)
+                    copy_tree(str(ruta), dir_path)
             else:
                 shutil.copy2(str(ruta), dir_path)
     logger.info("Copy completed")
     
-    if(make_compression):
+    update_pr(percent=50)
+    update_pr(percent=75)
+    
+    if(json_data.get_list("DRIVE", "COMPRESS")):
         compress(dir_name, dir_path)
     else:
         drive.upload_drive(dir_path)
         
+    update_pr(percent=100)
+    
     return True

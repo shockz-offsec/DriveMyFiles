@@ -4,21 +4,34 @@ from ui_OptionsWindow import Ui_OptionsWindow
 from ui_LogWindow import Ui_LogWindow
 from ui_AuthWindow import Ui_AuthWindow
 from PyQt5.QtCore import QEvent, QModelIndex, QPoint
-from PyQt5.QtWidgets import QFileDialog, QAction, QTableWidgetItem, QPushButton, QScrollBar, QWidget, QMessageBox
 from PyQt5.QtGui import QIcon, QPalette
-from PyQt5.uic.properties import QtWidgets
 from ui_MainWindow import *
-from PyQt5.QtWidgets import *
-from qtpy.QtWidgets import QApplication, QWidget
 import sys
 import os
 from utils import get_size
 from os.path import expanduser
-import resources
-from PyQt5.Qt import QUrl, QDesktopServices
+import resources # Mantener
 import drive
 import backup
 import re
+from PyQt5.QtCore import QObject, QThread, pyqtSignal
+from PyQt5.QtWidgets import (
+    QApplication,
+    QMainWindow,
+    QProgressBar,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
+    QMessageBox,
+    QFileDialog,
+    QMenu,
+    QAction, 
+    QTableWidgetItem, 
+    QPushButton, 
+    QScrollBar, 
+    QWidget,
+)
+
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     """Class to relate the functions of the lower layers to the interface elements"""
@@ -40,9 +53,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # AUTH_status
         drive.auth_status()
         
-        # Set 0 by default
-        self.pr_backup.setValue(0)
-        
         # Getting an instance of json_handler
         json_data = json_handler()
         array = json_data.get_list("DIRECTORIES")
@@ -51,6 +61,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.list_Paths.addItem(route)
         # Setting values to labels
         self.update_sizes()
+        # Setting value to backup progress bar
+        self.pr_backup.setValue(0)
         
         # Compress checkbox
         self.chk_compress.setChecked(json_data.get_list("DRIVE","COMPRESS"))
@@ -70,8 +82,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # Enable automatic
         self.chk_automatic.toggled.connect(self.automatic)
         # Backup
-        self.bt_backup.clicked.connect(self.backup)
-    
+        self.bt_backup.clicked.connect(self.backup_thread)
+        # Compress handler
+        self.chk_compress.toggled.connect(self.compress)
+        
         # view handler
         self.link_auth.clicked.connect(self.startAuthWindow)
         self.bt_log_viewer.clicked.connect(self.startLogWindow)
@@ -95,12 +109,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pr_size.setMaximum(100)
         self.pr_size.setValue(percent)
         
-    def backup(self):
-        output = backup.recompile(self.chk_compress.isChecked())
-        if not output:
-            QMessageBox.warning(self, "Warning", "You need to be authenticated")
-        else:
-            QMessageBox.information(self, "Info", "Backup Completed")
         
     def automatic(self):
         json_data = json_handler()
@@ -204,6 +212,45 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if re.match("/^$|\s+/|\.+",path) or not os.path.isdir(path):
             valid = False
         return valid
+    
+    def compress(self):
+        json_data = json_handler()
+        state = True
+        if not self.chk_compress.isChecked():
+           state = False
+        json_data.write_field("DRIVE",state,"COMPRESS")  
+    
+    
+    def backup(self):
+        output = backup.recompile()
+        if not output:
+            QMessageBox.warning(self, "Warning", "You need to be authenticated")
+        else:
+            QMessageBox.information(self, "Info", "Backup Completed")
+            
+    def backup_thread(self):
+        # Initial actions
+        self.update_progress(0)
+        # Create a QThread object
+        self.thread = QThread()
+        # Create a worker object
+        self.worker = Worker()
+        # Move worker to the thread
+        self.worker.moveToThread(self.thread)
+        # Connect signals and slots 
+        self.thread.started.connect(self.worker.run)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.worker.progress.connect(self.update_progress)
+        # Start the thread
+        self.thread.start()
+        # Final actions
+        self.bt_backup.setEnabled(False)
+
+    def update_progress(self, progress):
+        self.pr_backup.setValue(progress)
+        self.bt_backup.setEnabled(progress == 100)
 
 class AuthWindow(QtWidgets.QMainWindow, Ui_AuthWindow):
     
@@ -348,6 +395,24 @@ class OptionsWindow(QtWidgets.QMainWindow, Ui_OptionsWindow):
         self.hide()# hide this window
         self.ui = MainWindow()# Change to the auth window
         self.ui.show()# is displayed via auth window
+
+class Worker(QObject):
+    finished = pyqtSignal()
+    progress = pyqtSignal(int)
+
+    def run(self):
+
+        output = backup.recompile(self.update_progress)
+        """
+        if not output:
+            QMessageBox.warning(self, "Warning", "You need to be authenticated")
+        else:
+            QMessageBox.information(self, "Info", "Backup Completed")
+        """
+        self.finished.emit()
+        
+    def update_progress(self, percent):
+        self.progress.emit(percent)
 
 
 if __name__ == "__main__":
