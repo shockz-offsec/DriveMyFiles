@@ -1,5 +1,5 @@
 from json_handler import json_handler
-from logging import exception
+from logging import Logger, exception
 from ui_OptionsWindow import Ui_OptionsWindow
 from ui_LogWindow import Ui_LogWindow
 from ui_AuthWindow import Ui_AuthWindow
@@ -122,7 +122,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         json_data.write_field("DRIVE",state,"AUTO_BACKUP")  
         
     def editItem(self, item):
-        #QMessageBox.information(self, "Info", item.text())
         if(self.list_Paths.itemAt(item)):
             contextMenu = QMenu(self)
             editAct = contextMenu.addAction("Edit")
@@ -130,7 +129,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             action = contextMenu.exec_(QtGui.QCursor().pos())
             if action == editAct:
                 file = self.select_path()
-                print(file)
                 if file and self.not_exists_path(file):
                     self.list_Paths.currentItem().setText(os.path.normpath(file))
                     json_data = json_handler()
@@ -221,12 +219,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         json_data.write_field("DRIVE",state,"COMPRESS")  
     
     
-    def backup(self):
-        output = backup.recompile()
-        if not output:
-            QMessageBox.warning(self, "Warning", "You need to be authenticated")
-        else:
-            QMessageBox.information(self, "Info", "Backup Completed")
             
     def backup_thread(self):
         # Initial actions
@@ -243,14 +235,27 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.worker.finished.connect(self.worker.deleteLater)
         self.thread.finished.connect(self.thread.deleteLater)
         self.worker.progress.connect(self.update_progress)
+        self.worker.blk.connect(self.show_problems)
         # Start the thread
-        self.thread.start()
-        # Final actions
-        self.bt_backup.setEnabled(False)
+        try:
+            self.thread.start()
+        except Exception as e:
+            Logger.error(str(e))
+            QMessageBox.error(self, "Error", "Problems with your files")
+        finally:
+            # Final actions
+            self.bt_backup.setEnabled(False)
 
     def update_progress(self, progress):
         self.pr_backup.setValue(progress)
         self.bt_backup.setEnabled(progress == 100)
+        
+    def show_problems(self, output):
+        if  not output:
+            self.bt_backup.setEnabled(True)
+            QMessageBox.warning(self, "Warning", "You need to be authenticated")
+
+    
 
 class AuthWindow(QtWidgets.QMainWindow, Ui_AuthWindow):
     
@@ -399,16 +404,12 @@ class OptionsWindow(QtWidgets.QMainWindow, Ui_OptionsWindow):
 class Worker(QObject):
     finished = pyqtSignal()
     progress = pyqtSignal(int)
+    blk = pyqtSignal(bool)
 
     def run(self):
 
         output = backup.recompile(self.update_progress)
-        """
-        if not output:
-            QMessageBox.warning(self, "Warning", "You need to be authenticated")
-        else:
-            QMessageBox.information(self, "Info", "Backup Completed")
-        """
+        self.blk.emit(output)
         self.finished.emit()
         
     def update_progress(self, percent):
