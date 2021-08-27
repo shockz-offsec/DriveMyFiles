@@ -91,11 +91,12 @@ def recompile(update_pr):
     update_pr(percent=37)
     logger.info("Copying files...")
     for ruta in lista:
+        end_route = dir_path + '\\' + ruta.split('\\')[-1]
         if os.path.exists(ruta):
             if os.path.isdir(ruta):
-                    copy_tree(str(ruta), dir_path)
+                    copy_tree(str(ruta), end_route)
             else:
-                shutil.copy2(str(ruta), dir_path)
+                shutil.copy2(str(ruta), end_route)
     logger.info("Copy completed")
     
     update_pr(percent=50)

@@ -63,19 +63,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.update_sizes()
         # Setting value to backup progress bar
         self.pr_backup.setValue(0)
-        
+        # Automatic Backup
+        self.set_values_automatic_backup(json_data)
         # Compress checkbox
         self.chk_compress.setChecked(json_data.get_list("DRIVE","COMPRESS"))
-        # Automatic Backup
-        state_auto = json_data.get_list("DRIVE","AUTO_BACKUP")
-        self.chk_automatic.setChecked(state_auto)
-        self.sp_day.setEnabled(state_auto)
-        self.sp_day.setValue(json_data.get_list("TIMES","DAY"))
-        self.sp_hour.setEnabled(state_auto)
-        self.sp_hour.setValue(json_data.get_list("TIMES","HOUR"))
-        self.sp_month.setEnabled(state_auto)
-        self.sp_month.setValue(json_data.get_list("TIMES","MONTH"))
-        self.bt_save_dates.setEnabled(state_auto) 
         
         # Event handlers
         self.list_Paths.customContextMenuRequested.connect(self.editItem)
@@ -109,6 +100,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pr_size.setMaximum(100)
         self.pr_size.setValue(percent)
         
+    def set_values_automatic_backup(self, json_data):
+        state_auto = json_data.get_list("DRIVE","AUTO_BACKUP")
+        self.chk_automatic.setChecked(state_auto)
+        self.sp_day.setEnabled(state_auto)
+        self.sp_day.setValue(json_data.get_list("TIMES","DAY"))
+        self.sp_hour.setEnabled(state_auto)
+        self.sp_hour.setValue(json_data.get_list("TIMES","HOUR"))
+        self.sp_month.setEnabled(state_auto)
+        self.sp_month.setValue(json_data.get_list("TIMES","MONTH"))
+        self.bt_save_dates.setEnabled(state_auto) 
         
     def automatic(self):
         json_data = json_handler()
@@ -119,7 +120,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.sp_hour.setEnabled(state)
         self.sp_month.setEnabled(state)
         self.bt_save_dates.setEnabled(state)
-        json_data.write_field("DRIVE",state,"AUTO_BACKUP")  
+        json_data.write_field("DRIVE",state,"AUTO_BACKUP")
         
     def editItem(self, item):
         if(self.list_Paths.itemAt(item)):
@@ -159,9 +160,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.ui = OptionsWindow()# Change to the auth window
         self.ui.show()# is displayed via auth window
         
-    ##Selector of path    
+        
+    ##Selector of path
+    """Function to select de path of the file""" 
     def select_path(self):
-        """Function to select de path of the file"""
         try:
             button = self.sender()
             
@@ -183,6 +185,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             msg.setWindowTitle("Error")
             msg.exec_()
             return None    
+    
     
     def save_path(self):
         path = os.path.normpath(self.lb_path.toPlainText())
