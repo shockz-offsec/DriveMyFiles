@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'options_ui.ui'
+# Form implementation generated from reading ui file '.\options_ui.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #
@@ -207,7 +207,7 @@ class Ui_OptionsWindow(object):
         self.bt_number_backups.setPalette(palette)
         self.bt_number_backups.setObjectName("bt_number_backups")
         self.bt_back = QtWidgets.QPushButton(self.centralwidget)
-        self.bt_back.setGeometry(QtCore.QRect(720, 620, 41, 41))
+        self.bt_back.setGeometry(QtCore.QRect(710, 630, 41, 31))
         self.bt_back.setStyleSheet("image: url(:/DriveMyFiles/resources/arrow_back.png);")
         self.bt_back.setText("")
         self.bt_back.setObjectName("bt_back")

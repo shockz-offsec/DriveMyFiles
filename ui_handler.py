@@ -8,7 +8,7 @@ from PyQt5.QtGui import QIcon, QPalette
 from ui_MainWindow import *
 import sys
 import os
-from utils import get_size
+from utils import get_size, set_local_sizes, set_cloud_sizes
 from os.path import expanduser
 import resources # Mantener
 import drive
@@ -44,14 +44,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
     def init_ui(self):
         self.setupUi(self)
-        self.setFixedSize(780,706)
+        self.setFixedSize(812,706)
         # Theme
         qss_file = open('theme.qss').read()
         app.setStyleSheet(qss_file)
         app.setWindowIcon(QIcon("Resources/icon.png"))
-        
-        # AUTH_status
-        drive.auth_status()
         
         # Getting an instance of json_handler
         json_data = json_handler()
@@ -60,7 +57,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         for route in array:
             self.list_Paths.addItem(route)
         # Setting values to labels
-        self.update_sizes()
+        self.update_local_size()
+        self.update_cloud_size()
         # Setting value to backup progress bar
         self.pr_backup.setValue(0)
         # Automatic Backup
@@ -83,22 +81,25 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.bt_options.clicked.connect(self.startOptionsWindow)
         self.bt_target.clicked.connect(self.select_path)
         self.bt_save_path.clicked.connect(self.save_path)
- 
+        self.bt_refresh.clicked.connect(lambda: set_cloud_sizes())
+        self.bt_refresh.clicked.connect(self.update_cloud_size)
 
-    def update_sizes(self):
+    def update_local_size(self):
+        json_data = json_handler()
         # Setting values to labels
-        size, num_files, num_folders = get_size()
-        self.lb_files.setText(num_files)
-        self.lb_folders.setText(num_folders)
-        self.lb_size.setText(size)
+        self.lb_files.setText(json_data.get_list("SIZES", "LOCAL_FILES"))
+        self.lb_folders.setText(json_data.get_list("SIZES", "LOCAL_FOLDERS"))
+        self.lb_size.setText(json_data.get_list("SIZES", "LOCAL_SIZE"))
+        
+    def update_cloud_size(self):
+        json_data = json_handler()
         # Cloud Size
-        used, free, total, percent = drive.get_size()
-        self.lb_used.setText(used)
-        self.lb_free.setText(free)
-        self.lb_total.setText(total)
+        self.lb_used.setText(json_data.get_list("SIZES", "CLOUD_USED"))
+        self.lb_free.setText(json_data.get_list("SIZES", "CLOUD_FREE"))
+        self.lb_total.setText(json_data.get_list("SIZES", "CLOUD_TOTAL"))
         self.pr_size.setMinimum(0)
         self.pr_size.setMaximum(100)
-        self.pr_size.setValue(percent)
+        self.pr_size.setValue(json_data.get_list("SIZES", "CLOUD_PERCENT"))
         
     def set_values_automatic_backup(self, json_data):
         state_auto = json_data.get_list("DRIVE","AUTO_BACKUP")
@@ -134,7 +135,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     self.list_Paths.currentItem().setText(os.path.normpath(file))
                     json_data = json_handler()
                     json_data.edit_field_list("DIRECTORIES", self.list_Paths.row(self.list_Paths.itemAt(item)), os.path.normpath(file))
-                    self.update_sizes()
+                    #Update local sizes
+                    set_local_sizes()
+                    self.update_local_size()
                 elif not file:
                     return None
                 else:
@@ -143,7 +146,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.list_Paths.takeItem(self.list_Paths.currentRow())
                 json_data = json_handler()
                 json_data.remove_field_list("DIRECTORIES",self.list_Paths.row(self.list_Paths.itemAt(item)))
-                self.update_sizes()
+                #Update local sizes
+                set_local_sizes()
+                self.update_local_size()
                 
     def startAuthWindow(self):
         self.hide()# hide this window
@@ -196,7 +201,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.list_Paths.addItem(path)           
             json_data = json_handler()
             json_data.add_field_list("DIRECTORIES",path)
-            self.update_sizes()
+            #Update local sizes
+            set_local_sizes()
+            self.update_local_size()
             QMessageBox.information(self, "Info", "Path saved")
         else:
             QMessageBox.information(self, "Info", "Select a path folder that doesn't exists")   
@@ -220,8 +227,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if not self.chk_compress.isChecked():
            state = False
         json_data.write_field("DRIVE",state,"COMPRESS")  
-    
-    
             
     def backup_thread(self):
         # Initial actions
@@ -258,8 +263,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.bt_backup.setEnabled(True)
             QMessageBox.warning(self, "Warning", "You need to be authenticated")
 
-    
-
 class AuthWindow(QtWidgets.QMainWindow, Ui_AuthWindow):
     
     def __init__(self, *args, **kwargs):
@@ -269,7 +272,7 @@ class AuthWindow(QtWidgets.QMainWindow, Ui_AuthWindow):
         
     def init_ui(self):
         self.setupUi(self)
-        self.setFixedSize(780,706)
+        self.setFixedSize(812,706)
         # Theme
         qss_file = open('theme.qss').read()
         app.setStyleSheet(qss_file)
@@ -316,7 +319,7 @@ class LogWindow(QtWidgets.QMainWindow, Ui_LogWindow):
         
     def init_ui(self):
         self.setupUi(self)
-        self.setFixedSize(780,706)
+        self.setFixedSize(812,706)
         # Theme
         qss_file = open('theme.qss').read()
         app.setStyleSheet(qss_file)
@@ -357,7 +360,7 @@ class OptionsWindow(QtWidgets.QMainWindow, Ui_OptionsWindow):
         
     def init_ui(self):
         self.setupUi(self)
-        self.setFixedSize(780,706)
+        self.setFixedSize(812,706)
         # Theme
         qss_file = open('theme.qss').read()
         app.setStyleSheet(qss_file)
@@ -421,6 +424,11 @@ class Worker(QObject):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
+    # AUTH_status
+    drive.auth_status()
+    #Set sizes in json config file
+    set_local_sizes()
+    set_cloud_sizes()
     window = MainWindow()
     window.show()
     sys.exit(app.exec_())

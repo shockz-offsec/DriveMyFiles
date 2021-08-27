@@ -726,7 +726,7 @@
    <widget class="QPushButton" name="bt_back">
     <property name="geometry">
      <rect>
-      <x>720</x>
+      <x>710</x>
       <y>630</y>
       <width>41</width>
       <height>31</height>

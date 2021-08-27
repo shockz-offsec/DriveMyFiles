@@ -1,6 +1,7 @@
 import os
 from logger_settings import logger
 from json_handler import json_handler
+from drive import get_size as cloud_size
 
 """Calculate the size of the files or the files of a directory
    Returns: size of the files/dirs, number of files and number of folders
@@ -52,6 +53,19 @@ def get_size_format(b,factor=1024):
         b/= factor
     return f"{b:.2f}Y"
 
+"""Sets the values of the local sizes in the json configuration file"""
+def set_local_sizes():
+    json_data = json_handler()
+    size, num_files, num_folders = get_size()
+    json_data.write_field("SIZES", num_files, "LOCAL_FILES")
+    json_data.write_field("SIZES", num_folders, "LOCAL_FOLDERS")
+    json_data.write_field("SIZES", size, "LOCAL_SIZE")
 
-if __name__ == "__main__":
-    print(get_size())
+"""Sets the values of the cloud sizes in the json configuration file"""
+def set_cloud_sizes():
+    json_data = json_handler()
+    used, free, total, percent = cloud_size()
+    json_data.write_field("SIZES", used, "CLOUD_USED")
+    json_data.write_field("SIZES", free, "CLOUD_FREE")
+    json_data.write_field("SIZES", total, "CLOUD_TOTAL")
+    json_data.write_field("SIZES", percent, "CLOUD_PERCENT")

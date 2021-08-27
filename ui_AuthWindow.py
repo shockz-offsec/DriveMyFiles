@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'auth_ui.ui'
+# Form implementation generated from reading ui file '.\auth_ui.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #
@@ -240,7 +240,7 @@ class Ui_AuthWindow(object):
         self.bt_save_cred.setFont(font)
         self.bt_save_cred.setObjectName("bt_save_cred")
         self.bt_back = QtWidgets.QPushButton(self.centralwidget)
-        self.bt_back.setGeometry(QtCore.QRect(720, 630, 41, 31))
+        self.bt_back.setGeometry(QtCore.QRect(710, 630, 41, 31))
         self.bt_back.setStyleSheet("image: url(:/DriveMyFiles/resources/arrow_back.png);")
         self.bt_back.setText("")
         self.bt_back.setObjectName("bt_back")
@@ -270,6 +270,7 @@ class Ui_AuthWindow(object):
         self.label_7.setText(_translate("AuthWindow", "2. Paste the code in the following field"))
         self.label_8.setText(_translate("AuthWindow", "3. Press the button"))
         self.bt_save_cred.setText(_translate("AuthWindow", "Authenticate"))
+
 
 
 if __name__ == "__main__":

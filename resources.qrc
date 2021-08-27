@@ -3,5 +3,6 @@
     <file>resources/options.png</file>
     <file>resources/drive.png</file>
     <file>resources/arrow_back.png</file>
+    <file>resources/refresh.png</file>
   </qresource>
 </RCC>

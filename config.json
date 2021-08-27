@@ -10,6 +10,15 @@
         "COMPRESS": true,
         "AUTHENTICATED": false
     },
+    "SIZES": {
+        "LOCAL_FILES": "0",
+        "LOCAL_FOLDERS": "0",
+        "LOCAL_SIZE": "0.00 B",
+        "CLOUD_USED": "0 GB",
+        "CLOUD_FREE": "0 GB",
+        "CLOUD_TOTAL": "0 GB",
+        "CLOUD_PERCENT": 0
+    },
     "OPTIONS": {
         "NUM_BACKUP": 1,
         "DELETE_BACKUP": false
