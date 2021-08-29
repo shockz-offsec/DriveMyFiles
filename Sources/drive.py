@@ -2,7 +2,7 @@ from subprocess import Popen, PIPE
 import subprocess
 from logger_settings import logger
 import os,shutil
-from json_handler import json_handler
+from Sources.json_handler import json_handler
 
 
 """Uploads the files to google drive via gdrive

@@ -1,7 +1,7 @@
 import os
 from logger_settings import logger
-from json_handler import json_handler
-from drive import get_size as cloud_size
+from Sources.json_handler import json_handler
+from Sources.drive import get_size as cloud_size
 
 """Calculate the size of the files or the files of a directory
    Returns: size of the files/dirs, number of files and number of folders

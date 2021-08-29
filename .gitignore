@@ -1,10 +1,5 @@
 
 toDo.txt
-temp/xdd/xy.txt
-temp/xd.txt
-temp/dd.txt
-temp/config.json
-temp/backupdrive.zip
 logger_settings.pyc
 copy2/xdd/xy.txt
 copy2/xd.txt
@@ -19,3 +14,6 @@ __pycache__/logger_settings.cpython-39.pyc
 .idea/inspectionProfiles/profiles_settings.xml
 .idea/DriveMyFiles.iml
 log/message.log
+.qt_for_python/
+.idea/
+Temp/

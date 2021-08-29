@@ -4,8 +4,8 @@ import datetime
 from distutils.dir_util import copy_tree
 import zipfile
 from logger_settings import logger
-import drive
-from json_handler import json_handler
+import Sources.drive as drive
+from Sources.json_handler import json_handler
 
 
 """Compress all the files recursively into a zipfile located in the temp dir
