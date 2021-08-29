@@ -1,5 +1,5 @@
 from Sources.json_handler import json_handler
-from logging import Logger, exception
+from logger_settings import logger
 from PyQt5.QtGui import QIcon
 from UI.ui_MainWindow import *
 import sys
@@ -51,7 +51,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.chk_compress.setChecked(json_data.get_list("DRIVE", "COMPRESS"))
 
         # Event handlers
-        self.list_Paths.customContextMenuRequested.connect(self.editItem)
+        self.list_Paths.customContextMenuRequested.connect(self.modifyItem)
         # Enable automatic
         self.chk_automatic.toggled.connect(self.automatic)
         # Backup
@@ -107,35 +107,42 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.bt_save_dates.setEnabled(state)
         json_data.write_field("DRIVE", state, "AUTO_BACKUP")
 
-    def editItem(self, item):
+    def modifyItem(self, item):
+        json_data = json_handler()
         if(self.list_Paths.itemAt(item)):
             contextMenu = QMenu(self)
             editAct = contextMenu.addAction("Edit")
             deleteAct = contextMenu.addAction("Delete")
             action = contextMenu.exec_(QtGui.QCursor().pos())
             if action == editAct:
-                file = self.select_path()
-                if file and self.not_exists_path(file):
-                    self.list_Paths.currentItem().setText(os.path.normpath(file))
-                    json_data = json_handler()
-                    json_data.edit_field_list("DIRECTORIES", self.list_Paths.row(
-                        self.list_Paths.itemAt(item)), os.path.normpath(file))
-                    # Update local sizes
-                    set_local_sizes()
-                    self.update_local_size()
-                elif not file:
-                    return None
-                else:
-                    QMessageBox.warning(
-                        self, "Warning", "The directory or file already exists")
+                self.edit_item(item)
             if action == deleteAct:
                 self.list_Paths.takeItem(self.list_Paths.currentRow())
-                json_data = json_handler()
-                json_data.remove_field_list(
-                    "DIRECTORIES", self.list_Paths.row(self.list_Paths.itemAt(item)))
-                # Update local sizes
+                json_data.remove_field_list("DIRECTORIES",self.list_Paths.row(self.list_Paths.itemAt(item)))
+                #Update local sizes
                 set_local_sizes()
                 self.update_local_size()
+                
+    def edit_item(self, item):
+        file = self.getOpenFilesAndDirs(self,"Folder or files to backup", expanduser("~"))
+        
+        if not file:
+            return None
+        elif len(file)>1:
+            QMessageBox.warning(self, "Warning", "You can only replace one path with another path")
+            logger.warning("You can only replace one path with another path")
+        else:
+            path = file[0]
+            if self.not_exists_path([path]):
+                json_data = json_handler()
+                self.list_Paths.currentItem().setText(os.path.normpath(path))
+                json_data.edit_field_list("DIRECTORIES", self.list_Paths.row(self.list_Paths.itemAt(item)), os.path.normpath(path))
+                #Update local sizes
+                set_local_sizes()
+                self.update_local_size()
+            else:
+                QMessageBox.warning(self, "Warning", "The directory or file already exists")
+        
 
     def startAuthWindow(self):
         self.hide()  # hide this window
@@ -152,27 +159,28 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.ui = optionsWindow.OptionsWindow()  # Change to the auth window
         self.ui.show()  # is displayed via auth window
 
-    # Selector of path
-    """Function to select de path of the file"""
-
+    ##Selector of path
+    """Function to select de path of the file""" 
     def select_path(self):
+        button = self.sender()
         try:
-            button = self.sender()
-
             if button:
-                file = getOpenFilesAndDirs(
-                    self, "Folder to backup", expanduser("~"))[0]
-                if not self.valid_path(file):
+                files = self.getOpenFilesAndDirs(self,"Folder or files to backup", expanduser("~"))
+                if not self.valid_path(files) or not files:
                     return None
-                elif self.not_exists_path(file):
-                    print("Path selected: ", file)
-                    self.lb_path.setPlainText(os.path.normpath(file))
-                    return file
+                elif self.not_exists_path(files):
+                    if len(files) > 1:
+                        logger.info("Paths selected: " + ",".join(files))
+                        self.lb_path.setPlainText(os.path.normpath(",".join(files)))
+                    else:
+                        logger.info("Path selected: " + str(files[0]))
+                        self.lb_path.setPlainText(os.path.normpath(files[0]))
+                    return files
                 else:
-                    QMessageBox.warning(
-                        self, "Warning", "The directory or file already exists")
+                    QMessageBox.warning(self, "Warning", "The selected files already exist")
         except Exception as e:
             msg = QMessageBox()
+            logger.error(str(e))
             msg.setIcon(QMessageBox.Critical)
             msg.setText("Path of the file not valid")
             msg.setWindowTitle("Error")
@@ -180,34 +188,35 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             return None
 
     def save_path(self):
-        path = os.path.normpath(self.lb_path.toPlainText())
-
-        if not self.valid_path(path):
-            QMessageBox.information(
-                self, "Warning", "Select a correct path folder")
-        elif path and self.not_exists_path(path):
-            self.list_Paths.addItem(path)
-            json_data = json_handler()
-            json_data.add_field_list("DIRECTORIES", path)
-            # Update local sizes
-            set_local_sizes()
-            self.update_local_size()
-            QMessageBox.information(self, "Info", "Path saved")
+        paths = [os.path.normpath(p) for p in self.lb_path.toPlainText().split(",")]
+        
+        if not self.valid_path(paths):
+            QMessageBox.information(self, "Warning", "Select a correct path")   
+        elif paths and self.not_exists_path(paths):
+            for p in paths:
+                self.list_Paths.addItem(p)           
+                json_data = json_handler()
+                json_data.add_field_list("DIRECTORIES",p)
+                #Update local sizes
+                set_local_sizes()
+                self.update_local_size()
+            QMessageBox.information(self, "Info", "Paths saved")
         else:
-            QMessageBox.information(
-                self, "Info", "Select a path folder that doesn't exists")
-
-    def not_exists_path(self, path):
+            QMessageBox.information(self, "Info", "Select a path that doesn't exists")   
+            
+    def not_exists_path(self,path):
         notExists = True
-        for i in range(self.list_Paths.count()):
-            if self.list_Paths.item(i).text() == os.path.normpath(path):
-                notExists = False
+        for p in path:
+            for i in range(self.list_Paths.count()):
+                if self.list_Paths.item(i).text() == os.path.normpath(p):
+                    notExists = False
         return notExists
-
-    def valid_path(self, path):
+    
+    def valid_path(self,path):
         valid = True
-        if re.match("/^$|\s+/|\.+", path) or not os.path.isdir(path):
-            valid = False
+        for p in path:
+            if not p or re.match("/^$|\s+/|\.+",p) or (not os.path.isdir(p) and not os.path.isfile(p)):
+                valid = False
         return valid
 
     def compress(self):
@@ -237,7 +246,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         try:
             self.thread.start()
         except Exception as e:
-            Logger.error(str(e))
+            logger.error(str(e))
             QMessageBox.error(self, "Error", "Problems with your files")
         finally:
             # Final actions
@@ -253,52 +262,50 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
             QMessageBox.warning(
                 self, "Warning", "You need to be authenticated")
+            
+    """Function to generate a file explorer"""
+    def getOpenFilesAndDirs(self, parent=None, caption='', directory='', 
+                            filter='', initialFilter='', options=None):
+        def updateText():
+            # update the contents of the line edit widget with the selected files
+            selected = []
+            for index in view.selectionModel().selectedRows():
+                selected.append('"{}"'.format(index.data()))
+            lineEdit.setText(' '.join(selected))
 
+        dialog = QtWidgets.QFileDialog(parent, windowTitle=caption)
+        dialog.setFileMode(dialog.ExistingFiles)
+        if options:
+            dialog.setOptions(options)
+        dialog.setOption(dialog.DontUseNativeDialog, True)
+        if directory:
+            dialog.setDirectory(directory)
+        if filter:
+            dialog.setNameFilter(filter)
+            if initialFilter:
+                dialog.selectNameFilter(initialFilter)
 
-def getOpenFilesAndDirs(parent=None, caption='', directory='',
-                        filter='', initialFilter='', options=None):
-    def updateText():
-        # update the contents of the line edit widget with the selected files
-        selected = []
-        for index in view.selectionModel().selectedRows():
-            selected.append('"{}"'.format(index.data()))
-        lineEdit.setText(' '.join(selected))
+        # by default, if a directory is opened in file listing mode,
+        # QFileDialog.accept() shows the contents of that directory, but we 
+        # need to be able to "open" directories as we can do with files, so we 
+        # just override accept() with the default QDialog implementation which 
+        # will just return exec_()
+        dialog.accept = lambda: QtWidgets.QDialog.accept(dialog)
 
-    dialog = QtWidgets.QFileDialog(parent, windowTitle=caption)
-    dialog.setFileMode(dialog.ExistingFiles)
-    if options:
-        dialog.setOptions(options)
-    dialog.setOption(dialog.DontUseNativeDialog, True)
-    if directory:
-        dialog.setDirectory(directory)
-    if filter:
-        dialog.setNameFilter(filter)
-        if initialFilter:
-            dialog.selectNameFilter(initialFilter)
+        # there are many item views in a non-native dialog, but the ones displaying 
+        # the actual contents are created inside a QStackedWidget; they are a 
+        # QTreeView and a QListView, and the tree is only used when the 
+        # viewMode is set to QFileDialog.Details, which is not this case
+        stackedWidget = dialog.findChild(QtWidgets.QStackedWidget)
+        view = stackedWidget.findChild(QtWidgets.QListView)
+        view.selectionModel().selectionChanged.connect(updateText)
 
-    # by default, if a directory is opened in file listing mode,
-    # QFileDialog.accept() shows the contents of that directory, but we
-    # need to be able to "open" directories as we can do with files, so we
-    # just override accept() with the default QDialog implementation which
-    # will just return exec_()
-    dialog.accept = lambda: QtWidgets.QDialog.accept(dialog)
+        lineEdit = dialog.findChild(QtWidgets.QLineEdit)
+        # clear the line edit contents whenever the current directory changes
+        dialog.directoryEntered.connect(lambda: lineEdit.setText(''))
 
-    # there are many item views in a non-native dialog, but the ones displaying
-    # the actual contents are created inside a QStackedWidget; they are a
-    # QTreeView and a QListView, and the tree is only used when the
-    # viewMode is set to QFileDialog.Details, which is not this case
-    stackedWidget = dialog.findChild(QtWidgets.QStackedWidget)
-    view = stackedWidget.findChild(QtWidgets.QListView)
-    view.selectionModel().selectionChanged.connect(updateText)
-
-    lineEdit = dialog.findChild(QtWidgets.QLineEdit)
-    # clear the line edit contents whenever the current directory changes
-    dialog.directoryEntered.connect(lambda: lineEdit.setText(''))
-
-    dialog.exec_()
-    return dialog.selectedFiles()
-
-
+        dialog.exec_()
+        return dialog.selectedFiles()
 class Worker(QObject):
     finished = pyqtSignal()
     progress = pyqtSignal(int)
