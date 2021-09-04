@@ -39,10 +39,11 @@ def upload_drive(path):
 """
 def get_credentials(token=None):
 
-    # If exists the folder where credentials are saved, we'll delete it to save the new cred
+    # If exists the folder where credentials are saved, we'll rename it to save the new cred if there's incorrect we'll recover the original name (original credentials)
     base = os.getenv('APPDATA')+"\\.gdrive"
+    old = base+"_old"
     if os.path.exists(base):
-        shutil.rmtree(base, ignore_errors=False, onerror=None)
+        os.rename(base, old)
     
     args = ['gdrive\\gdrive.exe', 'about']
     p = None
@@ -53,13 +54,15 @@ def get_credentials(token=None):
     
     p.stdin.write(str(token))
     
-    out, error = p.communicate()
+    error = p.communicate()[1]
     
     if error:
         logger.error("Not valid token")
+        os.rename(old, base)
         return False
     else:
         logger.info("Credentials saved")
+        if os.path.exists(old): shutil.rmtree(old, ignore_errors=False, onerror=None)
         return True
      
 """Check if there's credentials in the computer, modifying the parameter in config's file according to the result

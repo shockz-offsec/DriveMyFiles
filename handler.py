@@ -4,7 +4,7 @@ from PyQt5.QtGui import QIcon
 from UI.ui_MainWindow import *
 import sys
 import os
-from Sources.utils import get_size, set_local_sizes, set_cloud_sizes
+from Sources.utils import get_size, set_local_sizes, set_cloud_sizes, check_space_availability
 from os.path import expanduser
 import Style.resources  # Mantener
 import Sources.drive as drive
@@ -75,6 +75,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.lb_folders.setText(json_data.get_list("SIZES", "LOCAL_FOLDERS"))
         self.lb_size.setText(json_data.get_list("SIZES", "LOCAL_SIZE"))
 
+    def check_cloud_changes(self):
+        json_data = json_handler()
+        if json_data.get_list("DRIVE", "AUTHENTICATED"):
+            set_cloud_sizes()
+            self.update_cloud_size()
+            
     def update_cloud_size(self):
         json_data = json_handler()
         # Cloud Size
@@ -189,14 +195,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def save_path(self):
         paths = [os.path.normpath(p) for p in self.lb_path.toPlainText().split(",")]
-        
+        json_data = json_handler()
         if not self.valid_path(paths):
             QMessageBox.information(self, "Warning", "Select a correct path")   
         elif paths and self.not_exists_path(paths):
             for p in paths:
-                self.list_Paths.addItem(p)           
-                json_data = json_handler()
-                json_data.add_field_list("DIRECTORIES",p)
+                json_data.add_field_list("DIRECTORIES", p)
+                #check_space_availability()
+                self.list_Paths.addItem(p)
                 #Update local sizes
                 set_local_sizes()
                 self.update_local_size()

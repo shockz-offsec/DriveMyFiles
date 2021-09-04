@@ -3,15 +3,20 @@ QMainWindow {
 }
 QListView {
 	background-color:#1e1d23;
+	color:white;
 }
 QDialog {
 	background-color:#1e1d23;
 }
-QLabel{
-
+QDialog QLabel{
 	background-color:#1e1d23;
+	color:white;
 }
-QColorDialog{
+QTreeView {
+	background-color:#1e1d23;
+	color:white;
+}
+QLabel{
 	background-color:#1e1d23;
 }
 QTextEdit {

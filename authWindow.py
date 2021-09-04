@@ -34,6 +34,9 @@ class AuthWindow(QtWidgets.QMainWindow, Ui_AuthWindow):
             QMessageBox.information(self, "Info", "Credentials saved")
             json_data = json_handler()
             json_data.write_field("DRIVE",True,"AUTHENTICATED")
+            # Cloud sizes update
+            self.ui = handler.MainWindow()# Change to the auth window
+            self.ui.check_cloud_changes()
         else:
             QMessageBox.information(self, "Info", "Invalid credentials")
     

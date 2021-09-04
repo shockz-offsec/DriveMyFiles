@@ -18,12 +18,10 @@ def get_size():
         if os.path.exists(ruta):
             if os.path.isdir(ruta):
                 num_dir += 1
-                #print(get_size_format(get_directory_size(ruta)))
-                total +=get_directory_size(ruta)
+                total += get_directory_size(ruta)
             else:
                 num_files += 1
-                #print(get_size_format(os.path.getsize(ruta)))
-                total +=os.path.getsize(ruta)
+                total += os.path.getsize(ruta)
     logger.info("Calculated size ...")
     return get_size_format(total), str(num_files), str(num_dir)
 
@@ -69,3 +67,15 @@ def set_cloud_sizes():
     json_data.write_field("SIZES", free, "CLOUD_FREE")
     json_data.write_field("SIZES", total, "CLOUD_TOTAL")
     json_data.write_field("SIZES", percent, "CLOUD_PERCENT")
+
+"""Check if there is enough space to add one more element."""
+def check_space_availability():
+    json_data = json_handler()
+    local_size = get_size()[0].split(" ")
+    cloud_free = json_data.get_list("SIZES", "CLOUD_FREE").split(" ")
+    units = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB"]
+    if ((units.index(local_size[1]) >= units.index(cloud_free[1])) and (float(local_size[0]) >= (float(cloud_free[0])-0.3))):# Error margin of 300 MB
+        print(units.index(local_size[1]),units.index(cloud_free[1]),local_size[0],float(cloud_free[0])-0.3)
+        return False
+    else:
+        return True
