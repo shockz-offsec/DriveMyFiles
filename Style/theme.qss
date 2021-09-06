@@ -19,6 +19,11 @@ QTreeView {
 QLabel{
 	background-color:#1e1d23;
 }
+QListView QLabel{
+	color:white;
+	background-color:transparent;
+	font-size: 12px;
+}
 QTextEdit {
 	background-color:#1e1d23;
 	color: white;

@@ -58,13 +58,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.bt_backup.clicked.connect(self.backup_thread)
         # Compress handler
         self.chk_compress.toggled.connect(self.compress)
-
         # view handler
         self.link_auth.clicked.connect(self.startAuthWindow)
         self.bt_log_viewer.clicked.connect(self.startLogWindow)
         self.bt_options.clicked.connect(self.startOptionsWindow)
         self.bt_target.clicked.connect(self.select_path)
         self.bt_save_path.clicked.connect(self.save_path)
+        self.bt_save_times.clicked.connect(self.save_times)
         self.bt_refresh.clicked.connect(lambda: set_cloud_sizes())
         self.bt_refresh.clicked.connect(self.update_cloud_size)
 
@@ -100,7 +100,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.sp_hour.setValue(json_data.get_list("TIMES", "HOUR"))
         self.sp_month.setEnabled(state_auto)
         self.sp_month.setValue(json_data.get_list("TIMES", "MONTH"))
-        self.bt_save_dates.setEnabled(state_auto)
+        self.bt_save_times.setEnabled(state_auto)
 
     def automatic(self):
         json_data = json_handler()
@@ -110,8 +110,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.sp_day.setEnabled(state)
         self.sp_hour.setEnabled(state)
         self.sp_month.setEnabled(state)
-        self.bt_save_dates.setEnabled(state)
+        self.bt_save_times.setEnabled(state)
         json_data.write_field("DRIVE", state, "AUTO_BACKUP")
+
+    def save_times(self):
+        json_data = json_handler()
+        json_data.write_field("TIMES", self.sp_day.value(), "DAY")
+        json_data.write_field("TIMES", self.sp_hour.value(), "HOUR")
+        json_data.write_field("TIMES", self.sp_month.value(), "MONTH")
 
     def modifyItem(self, item):
         json_data = json_handler()
@@ -166,7 +172,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.ui.show()  # is displayed via auth window
 
     ##Selector of path
-    """Function to select de path of the file""" 
+    """Function to select de path of the file"""
     def select_path(self):
         button = self.sender()
         try:

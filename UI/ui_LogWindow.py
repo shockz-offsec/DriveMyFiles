@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '.\log_ui.ui'
+# Form implementation generated from reading ui file '.\UI\log_ui.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #
@@ -152,6 +152,12 @@ class Ui_LogWindow(object):
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.PlaceholderText, brush)
         self.list_log.setPalette(palette)
         self.list_log.setObjectName("list_log")
+        self.bt_clear = QtWidgets.QPushButton(self.centralwidget)
+        self.bt_clear.setGeometry(QtCore.QRect(400, 590, 101, 31))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.bt_clear.setFont(font)
+        self.bt_clear.setObjectName("bt_clear")
         LogWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(LogWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 780, 21))
@@ -170,8 +176,7 @@ class Ui_LogWindow(object):
         self.label_2.setText(_translate("LogWindow", "Drive"))
         self.label_3.setText(_translate("LogWindow", "Options"))
         self.bt_log_viewer.setText(_translate("LogWindow", "Log-Viewer"))
-
-
+        self.bt_clear.setText(_translate("LogWindow", "Clear log"))
 
 if __name__ == "__main__":
     import sys

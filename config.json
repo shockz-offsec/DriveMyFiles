@@ -1,8 +1,8 @@
 {
     "DIRECTORIES": [],
     "TIMES": {
+        "HOUR": 0,
         "DAY": 1,
-        "HOUR": 1,
         "MONTH": 1
     },
     "DRIVE": {

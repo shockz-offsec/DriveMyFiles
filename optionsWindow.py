@@ -17,8 +17,6 @@ class OptionsWindow(QtWidgets.QMainWindow, Ui_OptionsWindow):
     def init_ui(self):
         self.setupUi(self)
         self.setFixedSize(812,706)
-        # Theme
-        
         #Getting a instance of json_handler
         json_data = json_handler()
         #Setting values
