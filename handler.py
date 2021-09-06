@@ -214,7 +214,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.update_local_size()
             QMessageBox.information(self, "Info", "Paths saved")
         else:
-            QMessageBox.information(self, "Info", "Select a path that doesn't exists")   
+            QMessageBox.information(self, "Info", "Select paths that don't exists")   
             
     def not_exists_path(self,path):
         notExists = True
@@ -253,6 +253,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.worker.finished.connect(self.worker.deleteLater)
         self.thread.finished.connect(self.thread.deleteLater)
         self.worker.progress.connect(self.update_progress)
+        self.worker.status.connect(self.show_status)
         self.worker.blk.connect(self.show_problems)
         # Start the thread
         try:
@@ -267,6 +268,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def update_progress(self, progress):
         self.pr_backup.setValue(progress)
         self.bt_backup.setEnabled(progress == 100)
+        
+    def show_status(self,status):
+        self.lb_backup.setText(status)
 
     def show_problems(self, output):
         if not output:
@@ -321,16 +325,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 class Worker(QObject):
     finished = pyqtSignal()
     progress = pyqtSignal(int)
+    status = pyqtSignal(str)
     blk = pyqtSignal(bool)
 
     def run(self):
 
-        output = backup.recompile(self.update_progress)
+        output = backup.recompile(self.update_progress, self.show_status)
         self.blk.emit(output)
         self.finished.emit()
 
     def update_progress(self, percent):
         self.progress.emit(percent)
+    
+    def show_status(self, status):
+        self.status.emit(status)
 
 
 if __name__ == "__main__":

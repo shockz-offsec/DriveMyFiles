@@ -13,21 +13,24 @@ Args:
     dir_name: name of the temp files directory
     dir_path: pathe of the temp files direcory
 """
-def compress(dir_name, dir_path):
+def compress(dir_name, dir_path, update_pr, show_status):
     
     zp_name = dir_name + '.zip'
     zp_path = 'Temp\\' + zp_name
     
     zp_file =  zipfile.ZipFile(zp_path, 'w')
-    
-    logger.info("Compressing files ...")
+    show_status("Compressing files...")
+    logger.info("Compressing files...")
     for root, subfolders, files in os.walk(dir_path):
         for filename in files:
                 zp_file.write(os.path.join(root, filename), os.path.relpath(os.path.join(root,filename), 'Temp\\' + dir_name), compress_type = zipfile.ZIP_DEFLATED)
     
     zp_file.close()
     logger.info("All files compressed into "+ zp_path)
+    show_status("Uploading files...")
+    update_pr(percent=75)
     drive.upload_drive(zp_path)
+    show_status("Upload completed")
 
 
 """Unzip the zip file downloaded from google drive
@@ -67,7 +70,7 @@ def clean(temp_dir):
 Args:
     make_compression: True indicates that we want to compress, False indicates that we don't want to compress
 """
-def recompile(update_pr):
+def recompile(update_pr, show_status):
 
     json_data = json_handler()
     
@@ -90,6 +93,7 @@ def recompile(update_pr):
         os.makedirs(dir_path)
     update_pr(percent=37)
     logger.info("Copying files...")
+    show_status("Copying files...")
     for ruta in lista:
         end_route = dir_path + '\\' + ruta.split('\\')[-1]
         if os.path.exists(ruta):
@@ -100,13 +104,13 @@ def recompile(update_pr):
     logger.info("Copy completed")
     
     update_pr(percent=50)
-    update_pr(percent=75)
-    
     if(json_data.get_list("DRIVE", "COMPRESS")):
-        compress(dir_name, dir_path)
+        compress(dir_name, dir_path, update_pr, show_status)
     else:
+        show_status("Uploading files...")
+        update_pr(percent=70)
         drive.upload_drive(dir_path)
+        show_status("Upload completed")
         
     update_pr(percent=100)
-    
     return True

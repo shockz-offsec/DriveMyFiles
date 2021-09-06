@@ -25,7 +25,7 @@ def upload_drive(path):
     try:
         p = Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
     except Exception as e:
-        logger.error("Cant execute the upload process to Google Drive" + str(e))
+        logger.error("Can't execute the upload process to Google Drive" + str(e))
         
     out, error = p.communicate()
     if out == 0:
@@ -50,7 +50,7 @@ def get_credentials(token=None):
     try:
         p = Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
     except Exception as e:
-        logger.error("Cant execute the validation process of gdrive" + str(e))
+        logger.error("Can't execute the validation process of gdrive" + str(e))
     
     p.stdin.write(str(token))
     
@@ -91,7 +91,7 @@ def download_drive(file_id):
     try:
         p = Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
     except Exception as e:
-        logger.error("Cant execute the validation process of gdrive" + str(e))
+        logger.error("Can't execute the validation process of gdrive" + str(e))
     
     out, error = p.communicate()
 
@@ -117,7 +117,7 @@ def get_size():
     out, error = p.communicate()
     
     if error:
-        logger.error("Cant retrive the size from Google Drive")
+        logger.error("Can't retrive the size from Google Drive")
     else:
         logger.info("Size retrievered")
     
