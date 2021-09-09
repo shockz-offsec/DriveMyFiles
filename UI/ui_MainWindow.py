@@ -949,7 +949,7 @@ class Ui_MainWindow(object):
         self.bt_save_times.setPalette(palette)
         self.bt_save_times.setObjectName("bt_save_times")
         self.pr_backup = QtWidgets.QProgressBar(self.centralwidget)
-        self.pr_backup.setGeometry(QtCore.QRect(340, 610, 191, 23))
+        self.pr_backup.setGeometry(QtCore.QRect(340, 610, 183, 23))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(169, 183, 198))
         brush.setStyle(QtCore.Qt.SolidPattern)

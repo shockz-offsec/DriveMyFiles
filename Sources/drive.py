@@ -12,7 +12,6 @@ Args:
 *If make_compression is False a folder will be created to contain all the files.
 """
 def upload_drive(path):
-    
     logger.info("Uploading to google drive")
     args = []
     if os.path.exists(path):
@@ -38,7 +37,6 @@ def upload_drive(path):
 *The file witch contains the credentials of gdrive will be placed in '../AppData/Roaming/.gdrive/'
 """
 def get_credentials(token=None):
-
     # If exists the folder where credentials are saved, we'll rename it to save the new cred if there's incorrect we'll recover the original name (original credentials)
     base = os.getenv('APPDATA')+"\\.gdrive"
     old = base+"_old"
@@ -84,20 +82,23 @@ Args:
 * If it is a directory it will be downloaded, if it is a zip file the unzip method will be called.
 """
 def download_drive(file_id):
-    
-    args = ['gdrive\\gdrive.exe', 'download', file_id]
+    json_data = json_handler()
+    if not json_data.get_list("DRIVE","AUTHENTICATED"):
+        logger.warning("No authenticated")
+        return False
 
-    p = None
+    args = 'gdrive\\gdrive.exe download -r ' + str(file_id) + ' --path \"..\\Downloads\"'
+    print(args)
+    out = ""
     try:
-        p = Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+        out = subprocess.check_output(args, shell=False, stderr=subprocess.STDOUT)
     except Exception as e:
-        logger.error("Can't execute the validation process of gdrive" + str(e))
+        logger.error("Can't download the backup: "+ str(e))
     
-    out, error = p.communicate()
+    if out: logger.info("Downloaded successfully")
 
 
 """Get the used space, free space and total size of the google drive account.
-    
 Returns: used space, free space and total size of the google drive account respectively
 """
 def get_size():
@@ -129,10 +130,27 @@ def get_size():
 
 """This method takes care of deleting backups after a certain time or under a user-specified backup limit
 Args:
-    name: name of the file / directory that we want to delete
+    file_id: name of the file / directory that we want to delete
 """
-def del_backup(name):
-    pass
+def del_backup(file_id):
+    json_data = json_handler()
+    if not json_data.get_list("DRIVE","AUTHENTICATED"):
+        logger.warning("No authenticated")
+        return False
+    
+    args = ['gdrive\\gdrive.exe', 'delete', str(file_id)]
+    p = None
+    try:
+        p = Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+    except Exception as e:
+        logger.error("Cant execute the validation process of gdrive" + str(e))
+    
+    out, error = p.communicate()
+    if error:
+        logger.error("Can't delete the backup")
+    else:
+        logger.info("Deleted: "+ str(file_id))
+
 
 """Auxiliar method which returns the percent of the cloud size left
 Args:
@@ -141,3 +159,27 @@ Args:
 """
 def get_percent(used, total):
     return round(float(used[0])/float(total[0])*100)
+
+"""Gets the name and id of the backups uploaded to the cloud"""
+def get_files():
+    json_data = json_handler()
+    if not json_data.get_list("DRIVE","AUTHENTICATED"):
+        logger.warning("No authenticated")
+        return False
+    info = {}
+    try:
+        out = subprocess.check_output('gdrive\\gdrive.exe list --query \"name contains \'backupdrive\'\" --order \"name desc\"', shell=False, stderr=subprocess.STDOUT)
+        out = str(out.decode("utf-8")).split("\n")[1:]
+        lenght = len(out)
+        
+        for n in range(lenght-1):
+            info[out[n].split()[1]] = out[n].split()[0]
+    except Exception as e:
+        logger.error("Can't retrive the backup's data " + str(e))
+    
+    if info: 
+        logger.info("Backups data retrieved")
+        return info
+    else:
+        return False
+    

@@ -20,7 +20,9 @@
         "CLOUD_PERCENT": 0
     },
     "OPTIONS": {
-        "NUM_BACKUP": 1,
-        "DELETE_BACKUP": false
+        "NUM_BACKUP_LOCAL": 3,
+        "DELETE_BACKUP_LOCAL": true,
+        "NUM_BACKUP_CLOUD": 4,
+        "DELETE_BACKUP_CLOUD": true
     }
 }
