@@ -56,7 +56,8 @@ def get_credentials(token=None):
     
     if error:
         logger.error("Not valid token")
-        os.rename(old, base)
+        if os.path.exists(old):
+            os.rename(old, base)
         return False
     else:
         logger.info("Credentials saved")
@@ -87,7 +88,7 @@ def download_drive(file_id):
         logger.warning("No authenticated")
         return False
 
-    args = 'gdrive\\gdrive.exe download -r ' + str(file_id) + ' --path \"..\\Downloads\"'
+    args = 'gdrive\gdrive.exe download -r ' + str(file_id) + ' --path "Downloads"'
     print(args)
     out = ""
     try:

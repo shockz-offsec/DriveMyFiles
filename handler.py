@@ -256,21 +256,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.worker.status.connect(self.show_status)
         self.worker.blk.connect(self.show_problems)
         # Start the thread
-        try:
-            self.thread.start()
-        except Exception as e:
-            logger.error(str(e))
-            QMessageBox.error(self, "Error", "Problems with your files")
-        finally:
-            # Final actions
-            self.bt_backup.setEnabled(False)
+        self.thread.start()
 
     def update_progress(self, progress):
         self.pr_backup.setValue(progress)
-        self.bt_backup.setEnabled(progress == 100)
+        self.bt_backup.setEnabled(progress == 100 or progress == 0)
         
-    def show_status(self,status):
+    def show_status(self,status,warning=False):
         self.lb_backup.setText(status)
+        if warning:
+           self.lb_backup.setStyleSheet("color : red")
+           QMessageBox.critical(self, "Critical", status) 
 
     def show_problems(self, output):
         if not output:
@@ -325,20 +321,26 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 class Worker(QObject):
     finished = pyqtSignal()
     progress = pyqtSignal(int)
-    status = pyqtSignal(str)
+    status = pyqtSignal(str,bool)
     blk = pyqtSignal(bool)
 
     def run(self):
-
-        output = backup.recompile(self.update_progress, self.show_status)
-        self.blk.emit(output)
-        self.finished.emit()
+        try:
+            output = backup.recompile(self.update_progress, self.show_status)
+            self.blk.emit(output)
+            self.finished.emit()
+            
+        except (OSError,IndexError,FileNotFoundError) as e:
+            self.status.emit("Problems with your files",True)
+            logger.error(e)
+            self.progress.emit(0)
+            self.finished.emit()
 
     def update_progress(self, percent):
         self.progress.emit(percent)
     
-    def show_status(self, status):
-        self.status.emit(status)
+    def show_status(self, status,warning=False):
+        self.status.emit(status,warning)
 
 
 if __name__ == "__main__":
