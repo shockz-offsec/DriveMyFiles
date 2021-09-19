@@ -13,6 +13,7 @@ import re
 import logWindow
 import optionsWindow
 import authWindow
+from Sources.task_scheduler import run_task
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
 from PyQt5.QtWidgets import (
     QMessageBox,
@@ -240,6 +241,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def backup_thread(self):
         # Initial actions
+        if self.chk_automatic.isChecked():
+            run_task(self.sp_hour.value(),self.sp_day.value(), self.sp_month.value())
         self.update_progress(0)
         # Create a QThread object
         self.thread = QThread()
@@ -330,7 +333,7 @@ class Worker(QObject):
             self.blk.emit(output)
             self.finished.emit()
             
-        except (OSError,IndexError,FileNotFoundError) as e:
+        except (OSError, IndexError, FileNotFoundError) as e:
             self.status.emit("Problems with your files",True)
             logger.error(e)
             self.progress.emit(0)

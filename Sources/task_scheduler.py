@@ -4,7 +4,7 @@ import pathlib
 import datetime
 
 working_directory = str(pathlib.Path(__file__).parent.absolute().parent.absolute())
-path_action = str(pathlib.Path(__file__).parent.absolute().parent.absolute())+"\\drive.py"
+path_action = str(pathlib.Path(__file__).parent.absolute().parent.absolute())+"\\automatic.py"
 computer_name = "" #leave all blank for current computer, current user
 computer_username = ""
 computer_userdomain = ""
@@ -35,43 +35,38 @@ RUNFLAGSENUM = {
     "TASK_RUN_USER_SID"              : 8 
 }
 
-#connect to the scheduler (Vista/Server 2008 and above only)
-scheduler = win32com.client.Dispatch("Schedule.Service")
-scheduler.Connect(computer_name or None, computer_username or None, computer_userdomain or None, computer_password or None)
-rootFolder = scheduler.GetFolder("\\")
-colTasks = rootFolder.GetTasks(0)
+def run_task(hour,day,week):
+    #connect to the scheduler (Vista/Server 2008 and above only)
+    scheduler = win32com.client.Dispatch("Schedule.Service")
+    scheduler.Connect(computer_name or None, computer_username or None, computer_userdomain or None, computer_password or None)
+    rootFolder = scheduler.GetFolder("\\")
 
-for task in colTasks:
-    print(task.Name)
+    start_time = datetime.datetime.now() + datetime.timedelta(hours=hour, days=day, weeks= week)
+    taskDef = scheduler.NewTask(0)
+    colTriggers = taskDef.Triggers
+    trigger = colTriggers.Create(TASK_TRIGGER_TIME)
+    trigger.StartBoundary = start_time.isoformat()
+    trigger.Enabled = True
 
-#(re)define the task
+    colActions = taskDef.Actions
+    action = colActions.Create(TASK_ACTION_EXEC)
+    action.ID = action_id
+    action.Path = action_path
+    action.WorkingDirectory = action_workdir
+    action.Arguments = action_arguments
 
-start_time = datetime.datetime.now() + datetime.timedelta(minutes=5)
-taskDef = scheduler.NewTask(0)
-colTriggers = taskDef.Triggers
-trigger = colTriggers.Create(TASK_TRIGGER_TIME)
-trigger.StartBoundary = start_time.isoformat()
-trigger.Enabled = True
+    info = taskDef.RegistrationInfo
+    info.Author = author
+    info.Description = description
 
-colActions = taskDef.Actions
-action = colActions.Create(TASK_ACTION_EXEC)
-action.ID = action_id
-action.Path = action_path
-action.WorkingDirectory = action_workdir
-action.Arguments = action_arguments
+    settings = taskDef.Settings
+    settings.Enabled = False
+    settings.Hidden = task_hidden
 
-info = taskDef.RegistrationInfo
-info.Author = author
-info.Description = description
+    #register the task (create or update, just keep the task name the same)
+    result = rootFolder.RegisterTaskDefinition(task_id, taskDef, TASK_CREATE_OR_UPDATE, "", "", RUNFLAGSENUM[run_flags] ) #username, password
 
-settings = taskDef.Settings
-settings.Enabled = False
-settings.Hidden = task_hidden
-
-#register the task (create or update, just keep the task name the same)
-result = rootFolder.RegisterTaskDefinition(task_id, taskDef, TASK_CREATE_OR_UPDATE, "", "", RUNFLAGSENUM[run_flags] ) #username, password
-
-#run the task once
-task = rootFolder.GetTask(task_id)
-task.Enabled = True
-runningTask = task.Run("")
+    #run the task once
+    task = rootFolder.GetTask(task_id)
+    task.Enabled = True
+    runningTask = task.Run("")
