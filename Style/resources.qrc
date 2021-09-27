@@ -1,8 +1,9 @@
 <RCC>
   <qresource prefix="DriveMyFiles">
-    <file>resources/options.png</file>
-    <file>resources/drive.png</file>
-    <file>resources/arrow_back.png</file>
-    <file>resources/refresh.png</file>
+    <file>../Resources/options.png</file>
+    <file>../Resources/drive.png</file>
+    <file>../Resources/arrow_back.png</file>
+    <file>../Resources/refresh.png</file>
+    <file>../Resources/error.ico</file>
   </qresource>
 </RCC>

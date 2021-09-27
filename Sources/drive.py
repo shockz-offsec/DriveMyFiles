@@ -29,7 +29,7 @@ def upload_drive(path):
     out, error = p.communicate()
     if out == 0:
         logger.error("An error occurred while uploading to google drive: " + error)
-    else:
+    elif error:
         logger.info("Your files have been uploaded successfully")
 
 

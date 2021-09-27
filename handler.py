@@ -69,6 +69,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.bt_refresh.clicked.connect(lambda: set_cloud_sizes())
         self.bt_refresh.clicked.connect(self.update_cloud_size)
 
+
     def update_local_size(self):
         json_data = json_handler()
         # Setting values to labels
@@ -258,6 +259,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.worker.progress.connect(self.update_progress)
         self.worker.status.connect(self.show_status)
         self.worker.blk.connect(self.show_problems)
+        self.bt_cancel.clicked.connect(self.worker.stop)
         # Start the thread
         self.thread.start()
 
@@ -277,12 +279,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
             QMessageBox.warning(
                 self, "Warning", "You need to be authenticated")
-            
+ 
     """Function to generate a file explorer"""
     def getOpenFilesAndDirs(self, parent=None, caption='', directory='', 
                             filter='', initialFilter='', options=None):
         def updateText():
-            # update the contents of the line edit widget with the selected files
             selected = []
             for index in view.selectionModel().selectedRows():
                 selected.append('"{}"'.format(index.data()))
@@ -300,27 +301,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             if initialFilter:
                 dialog.selectNameFilter(initialFilter)
 
-        # by default, if a directory is opened in file listing mode,
-        # QFileDialog.accept() shows the contents of that directory, but we 
-        # need to be able to "open" directories as we can do with files, so we 
-        # just override accept() with the default QDialog implementation which 
-        # will just return exec_()
         dialog.accept = lambda: QtWidgets.QDialog.accept(dialog)
 
-        # there are many item views in a non-native dialog, but the ones displaying 
-        # the actual contents are created inside a QStackedWidget; they are a 
-        # QTreeView and a QListView, and the tree is only used when the 
-        # viewMode is set to QFileDialog.Details, which is not this case
         stackedWidget = dialog.findChild(QtWidgets.QStackedWidget)
         view = stackedWidget.findChild(QtWidgets.QListView)
         view.selectionModel().selectionChanged.connect(updateText)
 
         lineEdit = dialog.findChild(QtWidgets.QLineEdit)
-        # clear the line edit contents whenever the current directory changes
+
         dialog.directoryEntered.connect(lambda: lineEdit.setText(''))
 
         dialog.exec_()
         return dialog.selectedFiles()
+    
 class Worker(QObject):
     finished = pyqtSignal()
     progress = pyqtSignal(int)
@@ -344,6 +337,13 @@ class Worker(QObject):
     
     def show_status(self, status,warning=False):
         self.status.emit(status,warning)
+    
+    def stop(self):
+        pass
+        #self.status.emit(None,False)
+        #os.system('taskkill /f /im gdrive.exe')
+        #self.progress.emit(0)
+        #self.finished.emit()
 
 
 if __name__ == "__main__":
@@ -351,6 +351,7 @@ if __name__ == "__main__":
     qss_file = open('Style/theme.qss').read()
     app.setStyleSheet(qss_file)
     app.setWindowIcon(QIcon("Resources/icon.png"))
+    app.aboutToQuit.connect(lambda: os.system('taskkill /f /im gdrive.exe'))
     # AUTH_status
     drive.auth_status()
     # Set sizes in json config file

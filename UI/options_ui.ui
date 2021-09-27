@@ -151,7 +151,7 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">image: url(:/DriveMyFiles/resources/drive.png);</string>
+      <string notr="true">image: url(:/DriveMyFiles/Resources/drive.png);</string>
      </property>
      <property name="text">
       <string/>
@@ -167,7 +167,7 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">image: url(:/DriveMyFiles/resources/options.png);</string>
+      <string notr="true">image: url(:/DriveMyFiles/Resources/options.png);</string>
      </property>
      <property name="text">
       <string/>
@@ -1079,7 +1079,7 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">image: url(:/DriveMyFiles/resources/arrow_back.png);</string>
+     <string notr="true">image: url(:/DriveMyFiles/Resources/arrow_back.png);</string>
     </property>
     <property name="text">
      <string/>

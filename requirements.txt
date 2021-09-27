@@ -1,4 +1,4 @@
 PyQt5
 qtpy
 win10toast
-win32com
+pypiwin32
