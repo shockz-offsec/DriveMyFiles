@@ -8,6 +8,8 @@ from PyQt5.QtWidgets import (
     QMessageBox,
     QDialog
 )
+from PyQt5.QtCore import QObject, QThread, pyqtSignal
+from logger_settings import logger
 
 class OptionsWindow(QtWidgets.QMainWindow, Ui_OptionsWindow):
     
@@ -109,22 +111,89 @@ class Download_Backup(QDialog):
         self.bt_download.setObjectName("bt_download")
         self.retranslateUi(self)
         QtCore.QMetaObject.connectSlotsByName(self)
-        self.progressBar = QtWidgets.QProgressBar(self)
-        self.progressBar.setGeometry(QtCore.QRect(140, 280, 112, 23))
-        self.progressBar.setProperty("value", 0)
-        self.progressBar.setObjectName("pr_download")
+        self.pr_download = QtWidgets.QProgressBar(self)
+        self.pr_download.setGeometry(QtCore.QRect(140, 280, 112, 23))
+        self.pr_download.setProperty("value", 0)
+        self.pr_download.setObjectName("pr_download")   
+        self.chk_unzip = QtWidgets.QCheckBox(self)
+        self.chk_unzip.setGeometry(QtCore.QRect(320, 240, 51, 21))
+        self.chk_unzip.setObjectName("chk_unzip")
+        palette = QtGui.QPalette()
+        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.WindowText, brush)
+        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.WindowText, brush)
+        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.WindowText, brush)
+        self.chk_unzip.setPalette(palette)
+        self.chk_unzip.setText("Unzip")
+        self.bt_cancel = QtWidgets.QPushButton(self)
+        self.bt_cancel.setGeometry(QtCore.QRect(280, 280, 21, 23))
+        self.bt_cancel.setText("")
+        self.bt_cancel.setObjectName("bt_cancel")
+        self.bt_cancel.setStyleSheet("image: url(:/DriveMyFiles/Resources/error.ico);")
         # Data
+        json_data = json_handler()
+        self.chk_unzip.setChecked(json_data.get_list("OPTIONS", "UNZIP"))
         files = drive.get_files()
         # Load the data into the list
         if files: [self.list_backups.addItem(name) for name in files.keys()]
         # Handlers
-        self.bt_download.clicked.connect(self.download)
-        
-    def download(self):
-        file_id = ""
-        drive.download_drive(file_id)
+        self.bt_download.clicked.connect(lambda: self.download_thread(files))
+        self.chk_unzip.toggled.connect(self.unzip)
 
+    def unzip(self):
+        json_data = json_handler()
+        state = True
+        if not self.chk_unzip.isChecked():
+           state = False
+        json_data.write_field("OPTIONS", state, "UNZIP")
+        
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
         self.bt_download.setText(_translate("Dialog", "Download"))
+        
+    def download_thread(self, files):
+        # Initial actions
+        filename = self.list_backups.currentItem().text()
+        self.update_progress(0)
+        # Create a QThread object
+        self.thread = QThread()
+        # Create a worker object
+        self.worker = Worker()
+        # Move worker to the thread
+        self.worker.moveToThread(self.thread)
+        # Connect signals and slots
+        self.thread.started.connect(lambda: self.worker.run(files[filename], filename))
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.worker.progress.connect(self.update_progress)
+        #self.bt_cancel.clicked.connect(self.worker.stop)
+        # Start the thread
+        self.thread.start()
+
+    def update_progress(self, progress):
+        self.pr_download.setValue(progress)
+        self.bt_download.setEnabled(progress == 100 or progress == 0)
+    
+class Worker(QObject):
+    finished = pyqtSignal()
+    progress = pyqtSignal(int)
+
+    def run(self, file_id, filename):
+        try:
+            drive.download_drive(file_id, filename, self.update_progress)
+            self.finished.emit()
+        except (OSError, IndexError, FileNotFoundError) as e:
+            self.status.emit("Problems downloading the file or files",True)
+            logger.error(e)
+            self.progress.emit(0)
+            self.finished.emit()
+
+    def update_progress(self, percent):
+        self.progress.emit(percent)       

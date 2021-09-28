@@ -8,21 +8,22 @@
     "DRIVE": {
         "AUTO_BACKUP": false,
         "COMPRESS": true,
-        "AUTHENTICATED": false
+        "AUTHENTICATED": true
     },
     "SIZES": {
         "LOCAL_FILES": "0",
         "LOCAL_FOLDERS": "0",
         "LOCAL_SIZE": "0.00 B",
-        "CLOUD_USED": "0 GB",
-        "CLOUD_FREE": "0 GB",
-        "CLOUD_TOTAL": "0 GB",
-        "CLOUD_PERCENT": 0
+        "CLOUD_USED": "1.4 GB",
+        "CLOUD_FREE": "14.8 GB",
+        "CLOUD_TOTAL": "16.1 GB",
+        "CLOUD_PERCENT": 9
     },
     "OPTIONS": {
         "NUM_BACKUP_LOCAL": 3,
         "DELETE_BACKUP_LOCAL": true,
         "NUM_BACKUP_CLOUD": 4,
-        "DELETE_BACKUP_CLOUD": true
+        "DELETE_BACKUP_CLOUD": true,
+        "UNZIP": false
     }
 }

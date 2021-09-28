@@ -3,6 +3,7 @@ import subprocess
 from logger_settings import logger
 import os,shutil
 from Sources.json_handler import json_handler
+from Sources.backup import unzip
 
 
 """Uploads the files to google drive via gdrive
@@ -82,12 +83,20 @@ Args:
     
 * If it is a directory it will be downloaded, if it is a zip file the unzip method will be called.
 """
-def download_drive(file_id):
+def download_drive(file_id, filename, update_pr=None):
     json_data = json_handler()
+    
     if not json_data.get_list("DRIVE","AUTHENTICATED"):
         logger.warning("No authenticated")
         return False
 
+    if not os.path.exists('Downloads'):
+        os.makedirs('Downloads')
+    
+    file_path = "Downloads\\" + filename
+    filename = filename.replace(".zip","")
+
+    update_pr(percent=55) if (update_pr != None) else None
     args = 'gdrive\gdrive.exe download -r ' + str(file_id) + ' --path "Downloads"'
     print(args)
     out = ""
@@ -97,6 +106,16 @@ def download_drive(file_id):
         logger.error("Can't download the backup: "+ str(e))
     
     if out: logger.info("Downloaded successfully")
+    
+    if file_path.endswith(".zip") and json_data.get_list("OPTIONS", "UNZIP"):
+        update_pr(percent=74) if (update_pr != None) else None
+        file_path_unzipped = "Downloads\\" + filename
+        os.makedirs(file_path_unzipped)
+        unzip(file_path, file_path_unzipped)
+        os.remove(file_path)
+    
+    update_pr(percent=100) if (update_pr != None) else None
+    
 
 
 """Get the used space, free space and total size of the google drive account.
