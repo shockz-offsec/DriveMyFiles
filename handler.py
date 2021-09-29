@@ -4,7 +4,7 @@ from PyQt5.QtGui import QIcon
 from UI.ui_MainWindow import *
 import sys
 import os
-from Sources.utils import get_size, set_local_sizes, set_cloud_sizes, check_space_availability
+from Sources.utils import get_size, set_local_sizes, set_cloud_sizes, check_space_availability, local_cleaner
 from os.path import expanduser
 import Style.resources  # Mantener
 import Sources.drive as drive
@@ -357,6 +357,9 @@ if __name__ == "__main__":
     # Set sizes in json config file
     set_local_sizes()
     set_cloud_sizes()
+    # Delete extra local backups
+    local_cleaner()
+    
     window = MainWindow()
     window.show()
     sys.exit(app.exec_())

@@ -154,7 +154,7 @@ class Download_Backup(QDialog):
         
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        Dialog.setWindowTitle(_translate("Dialog", "Download Backups"))
         self.bt_download.setText(_translate("Dialog", "Download"))
         
     def download_thread(self, files):

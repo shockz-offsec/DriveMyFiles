@@ -29,6 +29,7 @@ def compress(dir_name, dir_path, update_pr=None, show_status=None):
     
     zp_file.close()
     logger.info("All files compressed into "+ zp_path)
+    shutil.rmtree('Temp\\'+dir_name, ignore_errors=False, onerror=None)
     show_status("Uploading files...") if (show_status != None) else None
     update_pr(percent=75) if (update_pr != None) else None
     drive.upload_drive(zp_path)
@@ -50,22 +51,6 @@ def unzip(zp_path, dest_dir):
     zp_file.extractall(dest_dir)
     zp_file.close()
     logger.info("Unzip completed")
-
-
-"""Clean the temp directory
-Args:
-    temp_dir: temp's path
-    
-*Call it after upload the files to Google Drive
-"""
-def clean(temp_dir):
-    logger.info("Cleaning temp files...")
-    try:
-        shutil.rmtree(temp_dir, ignore_errors=False, onerror=None)
-        os.makedirs(temp_dir)
-    except OSError as e:
-        logger.error("Could not delete the directory - " + e.strerror)
-    logger.info("Complete cleaning")
 
 
 """Extracts all the information from the directories specified in the configuration file, copying them to the temporary directory
@@ -100,7 +85,7 @@ def recompile(update_pr=None, show_status=None):
         end_route = dir_path + '\\' + ruta.split('\\')[-1]
         if os.path.exists(ruta):
             if os.path.isdir(ruta):
-                    copy_tree(str(ruta), end_route)
+                copy_tree(str(ruta), end_route)
             else:
                 shutil.copy2(str(ruta), end_route)
     logger.info("Copy completed")
