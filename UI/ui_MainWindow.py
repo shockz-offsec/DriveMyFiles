@@ -1390,7 +1390,7 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "DriveMyFiles"))
         self.link_auth.setText(_translate("MainWindow", "Get Auth"))
-        self.label.setText(_translate("MainWindow", "Autentificación"))
+        self.label.setText(_translate("MainWindow", "Authentication"))
         self.label_2.setText(_translate("MainWindow", "Drive"))
         self.label_3.setText(_translate("MainWindow", "Options"))
         self.bt_log_viewer.setText(_translate("MainWindow", "Log-Viewer"))

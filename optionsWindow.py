@@ -30,7 +30,10 @@ class OptionsWindow(QtWidgets.QMainWindow, Ui_OptionsWindow):
         # Enable local delete backups
         self.chk_delete_local.toggled.connect(self.delete_toggle_local)
         self.bt_number_backups_local.clicked.connect(self.save_backups_local)
-        # Enable cloud delete backups
+        # Disable/Enabled download button in function of authenticated
+        json_data = json_handler()
+        self.bt_download.setEnabled(json_data.get_list("DRIVE","AUTHENTICATED"))
+        # Enable cloud delete backups 
         self.chk_delete_cloud.toggled.connect(self.delete_toggle_cloud)
         self.bt_number_backups_cloud.clicked.connect(self.save_backups_cloud)
         # Handlers
@@ -159,7 +162,13 @@ class Download_Backup(QDialog):
         
     def download_thread(self, files):
         # Initial actions
-        filename = self.list_backups.currentItem().text()
+        
+        # If there's no backup selected, no actions will be executed
+        try:
+            filename = self.list_backups.currentItem().text()
+        except:
+            return False
+        
         self.update_progress(0)
         # Create a QThread object
         self.thread = QThread()
@@ -172,6 +181,7 @@ class Download_Backup(QDialog):
         self.worker.finished.connect(self.thread.quit)
         self.worker.finished.connect(self.worker.deleteLater)
         self.thread.finished.connect(self.thread.deleteLater)
+        self.worker.blk.connect(self.show_problems)
         self.worker.progress.connect(self.update_progress)
         #self.bt_cancel.clicked.connect(self.worker.stop)
         # Start the thread
@@ -181,13 +191,21 @@ class Download_Backup(QDialog):
         self.pr_download.setValue(progress)
         self.bt_download.setEnabled(progress == 100 or progress == 0)
     
+    def show_problems(self, output):
+        if not output:
+            self.bt_download.setEnabled(True)
+            QMessageBox.warning(
+                self, "Warning", "You need to be authenticated")
+    
 class Worker(QObject):
     finished = pyqtSignal()
     progress = pyqtSignal(int)
+    blk = pyqtSignal(bool)
 
     def run(self, file_id, filename):
         try:
-            drive.download_drive(file_id, filename, self.update_progress)
+            out = drive.download_drive(file_id, filename, self.update_progress)
+            self.blk.emit(out)
             self.finished.emit()
         except (OSError, IndexError, FileNotFoundError) as e:
             self.status.emit("Problems downloading the file or files",True)

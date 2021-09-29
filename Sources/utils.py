@@ -110,8 +110,9 @@ def cloud_cleaner():
     json_data = json_handler()
     if json_data.get_list("OPTIONS", "DELETE_BACKUP_CLOUD"):
         list_backups = get_files(True)
-        count = len(list_backups) - json_data.get_list("OPTIONS", "NUM_BACKUP_CLOUD")
-        if count > 0:
-            for bkup in list(list_backups.keys())[0:count]:
-                del_backup(list_backups[bkup])
-            logger.info("Complete cleaning of cloud backups")
+        if list_backups:
+            count = len(list_backups) - json_data.get_list("OPTIONS", "NUM_BACKUP_CLOUD")
+            if count > 0:
+                for bkup in list(list_backups.keys())[0:count]:
+                    del_backup(list_backups[bkup])
+                logger.info("Complete cleaning of cloud backups")
