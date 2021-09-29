@@ -2,7 +2,7 @@ import os
 import time
 from logger_settings import logger
 from Sources.json_handler import json_handler
-from Sources.drive import get_size as cloud_size
+from Sources.drive import get_size as cloud_size, get_files, del_backup
 import shutil
 
 """Calculate the size of the files or the files of a directory
@@ -103,3 +103,15 @@ def local_cleaner():
                 except OSError as e:
                         logger.error("Could not delete the directory - " + e.strerror)
             logger.info("Complete cleaning of local backups")
+
+"""Remove the oldest n cloud backups set by the user
+"""        
+def cloud_cleaner():
+    json_data = json_handler()
+    if json_data.get_list("OPTIONS", "DELETE_BACKUP_CLOUD"):
+        list_backups = get_files(True)
+        count = len(list_backups) - json_data.get_list("OPTIONS", "NUM_BACKUP_CLOUD")
+        if count > 0:
+            for bkup in list(list_backups.keys())[0:count]:
+                del_backup(list_backups[bkup])
+            logger.info("Complete cleaning of cloud backups")

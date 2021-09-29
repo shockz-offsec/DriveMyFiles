@@ -158,7 +158,7 @@ def del_backup(file_id):
         logger.warning("No authenticated")
         return False
     
-    args = ['gdrive\\gdrive.exe', 'delete', str(file_id)]
+    args = ['gdrive\\gdrive.exe', 'delete', '-r', str(file_id)]
     p = None
     try:
         p = Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
@@ -181,14 +181,19 @@ def get_percent(used, total):
     return round(float(used[0])/float(total[0])*100)
 
 """Gets the name and id of the backups uploaded to the cloud"""
-def get_files():
+def get_files(orderbydate):
     json_data = json_handler()
     if not json_data.get_list("DRIVE","AUTHENTICATED"):
         logger.warning("No authenticated")
         return False
     info = {}
     try:
-        out = subprocess.check_output('gdrive\\gdrive.exe list --query \"name contains \'backupdrive\'\" --order \"name desc\"', shell=False, stderr=subprocess.STDOUT)
+        args = ""
+        if orderbydate:
+            args = 'gdrive\\gdrive.exe list --query \"name contains \'backupdrive\'\" --order \"createdTime asc\"'
+        else:
+            args = 'gdrive\\gdrive.exe list --query \"name contains \'backupdrive\'\" --order \"name desc\"'
+        out = subprocess.check_output(args, shell=False, stderr=subprocess.STDOUT)
         out = str(out.decode("utf-8")).split("\n")[1:]
         lenght = len(out)
         

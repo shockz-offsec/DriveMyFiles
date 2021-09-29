@@ -212,7 +212,7 @@
      </palette>
     </property>
     <property name="text">
-     <string>Autentificación</string>
+     <string>Authentication</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>

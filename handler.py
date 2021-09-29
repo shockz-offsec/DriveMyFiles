@@ -4,7 +4,7 @@ from PyQt5.QtGui import QIcon
 from UI.ui_MainWindow import *
 import sys
 import os
-from Sources.utils import get_size, set_local_sizes, set_cloud_sizes, check_space_availability, local_cleaner
+from Sources.utils import get_size, set_local_sizes, set_cloud_sizes, check_space_availability, local_cleaner, cloud_cleaner
 from os.path import expanduser
 import Style.resources  # Mantener
 import Sources.drive as drive
@@ -359,6 +359,7 @@ if __name__ == "__main__":
     set_cloud_sizes()
     # Delete extra local backups
     local_cleaner()
+    cloud_cleaner()
     
     window = MainWindow()
     window.show()

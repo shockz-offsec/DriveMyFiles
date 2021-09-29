@@ -138,7 +138,7 @@ class Download_Backup(QDialog):
         # Data
         json_data = json_handler()
         self.chk_unzip.setChecked(json_data.get_list("OPTIONS", "UNZIP"))
-        files = drive.get_files()
+        files = drive.get_files(False)
         # Load the data into the list
         if files: [self.list_backups.addItem(name) for name in files.keys()]
         # Handlers
