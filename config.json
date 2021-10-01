@@ -1,9 +1,11 @@
 {
-    "DIRECTORIES": [],
+    "DIRECTORIES": [
+        "C:\\Users\\Shockz\\.designer"
+    ],
     "TIMES": {
-        "HOUR": 0,
+        "HOUR": 1,
         "DAY": 1,
-        "MONTH": 1
+        "MONTH": 2
     },
     "DRIVE": {
         "AUTO_BACKUP": false,
@@ -12,17 +14,17 @@
     },
     "SIZES": {
         "LOCAL_FILES": "0",
-        "LOCAL_FOLDERS": "0",
-        "LOCAL_SIZE": "0.00 B",
-        "CLOUD_USED": "1.4 GB",
+        "LOCAL_FOLDERS": "1",
+        "LOCAL_SIZE": "21.08 KB",
+        "CLOUD_USED": "1.3 GB",
         "CLOUD_FREE": "14.8 GB",
         "CLOUD_TOTAL": "16.1 GB",
-        "CLOUD_PERCENT": 9
+        "CLOUD_PERCENT": 8
     },
     "OPTIONS": {
-        "NUM_BACKUP_LOCAL": 3,
-        "DELETE_BACKUP_LOCAL": true,
-        "NUM_BACKUP_CLOUD": 4,
+        "NUM_BACKUP_LOCAL": 2,
+        "DELETE_BACKUP_LOCAL": false,
+        "NUM_BACKUP_CLOUD": 1,
         "DELETE_BACKUP_CLOUD": true,
         "UNZIP": false
     }
