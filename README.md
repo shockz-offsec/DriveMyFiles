@@ -47,6 +47,6 @@ All the needed info about how to "install | use | enjoy" DriveMyFiles is present
 
 # Authors
 
-**Jorge Manuel Lozano Gómez**
+[**Jorge Manuel Lozano Gómez**](https://github.com/jmlgomez73)
 
-**Nicolás Cid Gómez**
+[**Nicolás Cid Gómez**](https://github.com/ncgomez17)
