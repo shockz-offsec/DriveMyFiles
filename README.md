@@ -1,52 +1,25 @@
-# Backup Script
+All the needed info about how to "install | use | enjoy" DriveMyFiles is present at [Github's Wiki](https://github.com/jmlgomez73/DriveMyFiles/wiki).
 
-- Principal despligue en Windows
-- Posibilidad de Linux
-- No se contempla MacOS
+*Content & Features*
+* [Content](https://github.com/jmlgomez73/DriveMyFiles/wiki)
+* [Features](https://github.com/jmlgomez73/DriveMyFiles/wiki/Features)
 
-## Casos de uso
-- Realizar recompilación, compresion y subida a la nube de diversos archivos / carpetas.
-- Ejecución periodica de dicho script (a elegir por desarrolladores: cron/crontab/windows)
-- Mostrar capacidad de la copia de seguridad local y en nube.
-- Eliminar copias de seguridad antiguas.
-- Barras de progreso
+*Requirements*
 
-## Archivo de configuración
-- Rutas de los archivos
-- Credenciales drive ()
-- Google Drive API Key
-- Periodicidad a la que se ejecute el script
-- Ruta local donde se almacena la informacion previamente a la subida a la nube
-- Ruta del registro del script (Seguramente un directorio del paquete) (en principio es una ruta estática)
+* [Requirements](https://github.com/jmlgomez73/DriveMyFiles/wiki/Requirements)
+  * [Through the binary](https://github.com/jmlgomez73/DriveMyFiles/wiki/Requirements#through-the-binary)
+  * [Requirements through Python](https://github.com/jmlgomez73/DriveMyFiles/wiki/Requirements#requirements-through-python)
+* [Compatibility](https://github.com/jmlgomez73/DriveMyFiles/wiki/Compatibility)
 
-## Tecnologias y ficheros
-- Python3
-- Archivo con configuración (json)
-- gdrive (binarios de forma estatica) =/ si se quisiera usar la api de drive se necesitarian de librerias externas // (modificar codigo para añadir api key)
+*Getting Started*
 
-## Aspecto a implementar para mejorar cara al usuario final
+* [Instalation](https://github.com/jmlgomez73/DriveMyFiles/wiki/Instalation)
+  * [Binary Instalation](https://github.com/jmlgomez73/DriveMyFiles/wiki/Instalation#binary-instalation)
+  * [Generic Instalation](https://github.com/jmlgomez73/DriveMyFiles/wiki/Instalation#generic-installation)
+* [Usage](https://github.com/jmlgomez73/DriveMyFiles/wiki/Usage)
 
-### GUI
-- Botón para hacer copia a voluntad
-- Opciones del archivo de configuración a través de la gui
-- Establecer periodo cron/crontab/win 
-- Elegir rutas mediante explorer
+*Project & Development*
 
-### Otros aspectos
-- Bajar cambios a un directorio local.
-
-## Otras características a contemplar
-- Habilitar: cifrar archivo (true/false)
-- Eliminar ficheros que hay en drive que no estan incluidos en las rutas de los archivos que se les quiere hacer backup
-- Añadir marca de tiempo al archivo comprimido a no ser que se pueda obtener un timestamp de otro lugar
-
-
-## Librerias Python
-
-- shutil (copia, recompilacion de archivos)
-- logging
-- gdrive
-- configparser (modificar el código de forma dinámica a raíz de necesidad)
-- tarfile/zipfile u otro modulo de compresión
-- os (eliminar copias locales temporales, comprobacion de existencia de ficheros/paths)
--   ºcrontab
+* [Components](https://github.com/jmlgomez73/DriveMyFiles/wiki/Components)
+* [Automatic Backup](https://github.com/jmlgomez73/DriveMyFiles/wiki/AutomaticBackup)
+* [License](https://github.com/jmlgomez73/DriveMyFiles/wiki/License)
