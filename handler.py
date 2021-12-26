@@ -209,12 +209,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         elif paths and self.not_exists_path(paths):
             for p in paths:
                 json_data.add_field_list("DIRECTORIES", p)
-                #check_space_availability()
                 self.list_Paths.addItem(p)
-                #Update local sizes
                 set_local_sizes()
                 self.update_local_size()
-            QMessageBox.information(self, "Info", "Paths saved")
+            if(check_space_availability()==False):
+              self.list_Paths.takeItem(self.list_Paths.count()-1)
+              json_data.remove_field_list("DIRECTORIES",self.list_Paths.row(self.list_Paths.item(self.list_Paths.count())))
+            ##json_data.remove_field_list("DIRECTORIES",self.list_Paths.row(self.list_Paths.itemAt(item)))
+              QMessageBox.information(self, "Info", "There is not enough space in drive")
+            else:
+              QMessageBox.information(self, "Info", "Paths saved")
         else:
             QMessageBox.information(self, "Info", "Select paths that don't exists")   
             
@@ -247,25 +251,32 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.update_progress(0)
         # Create a QThread object
         self.thread = QThread()
+        self.thread.setTerminationEnabled(True)
         # Create a worker object
         self.worker = Worker()
         # Move worker to the thread
         self.worker.moveToThread(self.thread)
+        self.thread.setTerminationEnabled(enabled=True)
         # Connect signals and slots
         self.thread.started.connect(self.worker.run)
         self.worker.finished.connect(self.thread.quit)
         self.worker.finished.connect(self.worker.deleteLater)
         self.thread.finished.connect(self.thread.deleteLater)
         self.worker.progress.connect(self.update_progress)
+        self.worker.not_size.connect(self.not_size)
         self.worker.status.connect(self.show_status)
         self.worker.blk.connect(self.show_problems)
-        self.bt_cancel.clicked.connect(self.worker.stop)
         # Start the thread
         self.thread.start()
-
+            
     def update_progress(self, progress):
         self.pr_backup.setValue(progress)
         self.bt_backup.setEnabled(progress == 100 or progress == 0)
+        
+    def not_size(self, not_size):
+        if(not_size==True):
+          QMessageBox.warning(
+          self, "Warning", "There's no space left")
         
     def show_status(self,status,warning=False):
         self.lb_backup.setText(status)
@@ -314,17 +325,21 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         dialog.exec_()
         return dialog.selectedFiles()
     
-class Worker(QObject):
+class Worker(QThread):
     finished = pyqtSignal()
     progress = pyqtSignal(int)
     status = pyqtSignal(str,bool)
     blk = pyqtSignal(bool)
+    not_size = pyqtSignal(bool)
 
     def run(self):
         try:
-            output = backup.recompile(self.update_progress, self.show_status)
-            self.blk.emit(output)
-            self.finished.emit()
+            if(check_space_availability()==False):
+              self.not_size.emit(True)
+            else:    
+                output = backup.recompile(self.update_progress, self.show_status)
+                self.blk.emit(output)
+                self.finished.emit()
             
         except (OSError, IndexError, FileNotFoundError) as e:
             self.status.emit("Problems with your files",True)
@@ -337,13 +352,7 @@ class Worker(QObject):
     
     def show_status(self, status,warning=False):
         self.status.emit(status,warning)
-    
-    def stop(self):
-        pass
-        #self.status.emit(None,False)
-        #os.system('taskkill /f /im gdrive.exe')
-        #self.progress.emit(0)
-        #self.finished.emit()
+      
 
 
 if __name__ == "__main__":
