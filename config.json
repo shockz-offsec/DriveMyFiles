@@ -6,7 +6,7 @@
         "MONTH": 4
     },
     "DRIVE": {
-        "AUTO_BACKUP": true,
+        "AUTO_BACKUP": false,
         "COMPRESS": true,
         "AUTHENTICATED": false
     },
