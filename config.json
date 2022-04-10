@@ -1,6 +1,5 @@
 {
-    "DIRECTORIES": [
-    ],
+    "DIRECTORIES": [],
     "TIMES": {
         "HOUR": 5,
         "DAY": 4,
@@ -14,10 +13,10 @@
     "SIZES": {
         "LOCAL_FILES": "0",
         "LOCAL_FOLDERS": "0",
-        "LOCAL_SIZE": "",
-        "CLOUD_USED": "",
-        "CLOUD_FREE": "",
-        "CLOUD_TOTAL": "",
+        "LOCAL_SIZE": "0.00 B",
+        "CLOUD_USED": "0 GB",
+        "CLOUD_FREE": "0 GB",
+        "CLOUD_TOTAL": "0 GB",
         "CLOUD_PERCENT": 0
     },
     "OPTIONS": {
