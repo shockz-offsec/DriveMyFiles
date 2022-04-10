@@ -1,7 +1,7 @@
 from win10toast import ToastNotifier
 import pathlib
 from backup import recompile
-from utils import check_space_availability
+from utils import check_space_availability, local_cleaner, cloud_cleaner
 
 
 def show_toast_task(title, message, path_image):
@@ -12,8 +12,10 @@ def show_toast_task(title, message, path_image):
 
 
 if __name__ == "__main__":
-
     try:
+        local_cleaner()
+        cloud_cleaner()
+        
         working_directory = str(pathlib.Path(
             __file__).parent.absolute().parent.absolute())+"\\Resources\\icon.ico"
         if(check_space_availability() == False):

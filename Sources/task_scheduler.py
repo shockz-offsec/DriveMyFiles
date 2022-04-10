@@ -5,21 +5,21 @@ import datetime
 
 working_directory = str(pathlib.Path(__file__).parent.absolute().parent.absolute())
 path_action = str(pathlib.Path(__file__).parent.absolute().parent.absolute())+"\\automatic.py"
-computer_name = "" #leave all blank for current computer, current user
+computer_name = ""
 computer_username = ""
 computer_userdomain = ""
 computer_password = ""
-action_id = "DriveMyFiles Task" #arbitrary action ID
+action_id = "DriveMyFiles Task"
 action_path = path_action
-action_arguments = 'python3 ' #arguments (could be something.py)
-action_workdir = working_directory #working directory for action executable" 
-author = getuser() #so that end users know who you are
-description = "DriveMyFiles task" #so that end users can identify the task
+action_arguments = 'python3 '
+action_workdir = working_directory
+author = getuser()
+description = "DriveMyFiles task"
 task_id = "DriveMyFiles"
-task_hidden = False #set this to True to hide the task in the interface
+task_hidden = False
 username = ""
 password = ""
-run_flags = "TASK_RUN_NO_FLAGS" #see dict below, use in combo with username/password
+run_flags = "TASK_RUN_NO_FLAGS"
 
 #define constants
 TASK_TRIGGER_TIME = 1
@@ -63,10 +63,8 @@ def run_task(hour,day,week):
     settings.Enabled = False
     settings.Hidden = task_hidden
 
-    #register the task (create or update, just keep the task name the same)
-    result = rootFolder.RegisterTaskDefinition(task_id, taskDef, TASK_CREATE_OR_UPDATE, "", "", RUNFLAGSENUM[run_flags] ) #username, password
+    result = rootFolder.RegisterTaskDefinition(task_id, taskDef, TASK_CREATE_OR_UPDATE, "", "", RUNFLAGSENUM[run_flags] )
 
-    #run the task once
     task = rootFolder.GetTask(task_id)
     task.Enabled = True
     runningTask = task.Run("")

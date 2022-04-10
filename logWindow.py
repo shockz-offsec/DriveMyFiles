@@ -13,7 +13,6 @@ class LogWindow(QtWidgets.QMainWindow, Ui_LogWindow):
     def init_ui(self):
         self.setupUi(self)
         self.setFixedSize(812,706)
-        # add items
         with open('log/message.log','r') as logg:
             lines = reversed(logg.readlines())
             for entry in lines:
@@ -48,19 +47,19 @@ class LogWindow(QtWidgets.QMainWindow, Ui_LogWindow):
         self.bt_clear.clicked.connect(lambda:[open('log/message.log', 'w').close(), self.reload()])
         
     def reload(self):
-        self.hide()# hide this window
-        self.ui = LogWindow()# Change to the auth window
-        self.ui.show()# is displayed via auth window
+        self.hide()
+        self.ui = LogWindow()
+        self.ui.show()
         
     def backToMain(self):
-        self.hide()# hide this window
-        self.ui = handler.MainWindow()# Change to the auth window
-        self.ui.show()# is displayed via auth window
+        self.hide()
+        self.ui = handler.MainWindow()
+        self.ui.show()
         
     def startOptionsWindow(self):
-        self.hide()# hide this window
-        self.ui = optionsWindow.OptionsWindow()# Change to the auth window
-        self.ui.show()# is displayed via auth window
+        self.hide()
+        self.ui = optionsWindow.OptionsWindow()
+        self.ui.show()
         
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

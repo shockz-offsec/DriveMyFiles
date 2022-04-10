@@ -35,24 +35,24 @@ class AuthWindow(QtWidgets.QMainWindow, Ui_AuthWindow):
             json_data = json_handler()
             json_data.write_field("DRIVE",True,"AUTHENTICATED")
             # Cloud sizes update
-            self.ui = handler.MainWindow()# Change to the auth window
+            self.ui = handler.MainWindow()
             self.ui.check_cloud_changes()
         else:
             QMessageBox.information(self, "Info", "Invalid credentials")
     
     def backToMain(self):
-        self.hide()# hide this window
-        self.ui = handler.MainWindow()# Change to the auth window
-        self.ui.show()# is displayed via auth window
+        self.hide()
+        self.ui = handler.MainWindow()
+        self.ui.show()
         
     def startLogWindow(self):
-        self.hide()# hide this window
-        self.ui = logWindow.LogWindow()# Change to the auth window
-        self.ui.show()# is displayed via auth window
+        self.hide()
+        self.ui = logWindow.LogWindow()
+        self.ui.show()
         
     def startOptionsWindow(self):
-        self.hide()# hide this window
-        self.ui = optionsWindow.OptionsWindow()# Change to the auth window
-        self.ui.show()# is displayed via auth window
+        self.hide()
+        self.ui = optionsWindow.OptionsWindow()
+        self.ui.show()
         
 

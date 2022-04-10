@@ -83,14 +83,14 @@ class OptionsWindow(QtWidgets.QMainWindow, Ui_OptionsWindow):
         QMessageBox.information(self, "Info", "Cloud backup options saved")
     
     def reload(self):
-        self.hide()# hide this window
-        self.ui = logWindow.LogWindow()# Change to the auth window
-        self.ui.show()# is displayed via auth window
+        self.hide()
+        self.ui = logWindow.LogWindow()
+        self.ui.show()
         
     def backToMain(self):
-        self.hide()# hide this window
-        self.ui = handler.MainWindow()# Change to the auth window
-        self.ui.show()# is displayed via auth window
+        self.hide()
+        self.ui = handler.MainWindow()
+        self.ui.show()
 
     def download_dialog(self): 
         self.dialog = Download_Backup(self)
@@ -183,7 +183,6 @@ class Download_Backup(QDialog):
         self.thread.finished.connect(self.thread.deleteLater)
         self.worker.blk.connect(self.show_problems)
         self.worker.progress.connect(self.update_progress)
-        #self.bt_cancel.clicked.connect(self.worker.stop)
         # Start the thread
         self.thread.start()
 

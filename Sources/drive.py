@@ -1,4 +1,4 @@
-from subprocess import Popen, PIPE
+from subprocess import Popen
 import subprocess
 from logger_settings import logger
 import os,shutil
@@ -38,7 +38,6 @@ def upload_drive(path):
 *The file witch contains the credentials of gdrive will be placed in '../AppData/Roaming/.gdrive/'
 """
 def get_credentials(token=None):
-    # If exists the folder where credentials are saved, we'll rename it to save the new cred if there's incorrect we'll recover the original name (original credentials)
     base = os.getenv('APPDATA')+"\\.gdrive"
     old = base+"_old"
     if os.path.exists(base):

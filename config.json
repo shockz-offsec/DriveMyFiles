@@ -1,29 +1,32 @@
 {
     "DIRECTORIES": [
-        "C:\\Users\\Shockz\\.designer"
+        "C:\\Users\\Usuario\\.RapidMiner",
+        "D:\\fornite",
+        "C:\\Users\\Usuario\\.conda",
+        "D:\\GTAV"
     ],
     "TIMES": {
-        "HOUR": 1,
-        "DAY": 1,
-        "MONTH": 2
+        "HOUR": 5,
+        "DAY": 4,
+        "MONTH": 4
     },
     "DRIVE": {
-        "AUTO_BACKUP": false,
+        "AUTO_BACKUP": true,
         "COMPRESS": true,
         "AUTHENTICATED": true
     },
     "SIZES": {
         "LOCAL_FILES": "0",
-        "LOCAL_FOLDERS": "1",
-        "LOCAL_SIZE": "21.08 KB",
-        "CLOUD_USED": "1.3 GB",
-        "CLOUD_FREE": "14.8 GB",
+        "LOCAL_FOLDERS": "4",
+        "LOCAL_SIZE": "303.22 MB",
+        "CLOUD_USED": "10.4 GB",
+        "CLOUD_FREE": "5.7 GB",
         "CLOUD_TOTAL": "16.1 GB",
-        "CLOUD_PERCENT": 8
+        "CLOUD_PERCENT": 65
     },
     "OPTIONS": {
         "NUM_BACKUP_LOCAL": 2,
-        "DELETE_BACKUP_LOCAL": false,
+        "DELETE_BACKUP_LOCAL": true,
         "NUM_BACKUP_CLOUD": 1,
         "DELETE_BACKUP_CLOUD": true,
         "UNZIP": false

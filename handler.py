@@ -4,7 +4,7 @@ from PyQt5.QtGui import QIcon
 from UI.ui_MainWindow import *
 import sys
 import os
-from Sources.utils import get_size, set_local_sizes, set_cloud_sizes, check_space_availability, local_cleaner, cloud_cleaner
+from Sources.utils import  set_local_sizes, set_cloud_sizes, check_space_availability, local_cleaner, cloud_cleaner
 from os.path import expanduser
 import Style.resources  # Mantener
 import Sources.drive as drive
@@ -33,33 +33,24 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def init_ui(self):
         self.setupUi(self)
         self.setFixedSize(812, 706)
-        # Theme
         self.lb_path
-        # Getting an instance of json_handler
+        
         json_data = json_handler()
         array = json_data.get_list("DIRECTORIES")
-        # Setting values to ListView
+        
         for route in array:
             self.list_Paths.addItem(route)
-        # Setting values to labels
         self.update_local_size()
         self.update_cloud_size()
-        # Setting value to backup progress bar
+        
         self.pr_backup.setValue(0)
-        # Automatic Backup
         self.set_values_automatic_backup(json_data)
-        # Compress checkbox
         self.chk_compress.setChecked(json_data.get_list("DRIVE", "COMPRESS"))
 
-        # Event handlers
         self.list_Paths.customContextMenuRequested.connect(self.modifyItem)
-        # Enable automatic
         self.chk_automatic.toggled.connect(self.automatic)
-        # Backup
         self.bt_backup.clicked.connect(self.backup_thread)
-        # Compress handler
         self.chk_compress.toggled.connect(self.compress)
-        # view handler
         self.link_auth.clicked.connect(self.startAuthWindow)
         self.bt_log_viewer.clicked.connect(self.startLogWindow)
         self.bt_options.clicked.connect(self.startOptionsWindow)
@@ -69,30 +60,31 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.bt_refresh.clicked.connect(lambda: set_cloud_sizes())
         self.bt_refresh.clicked.connect(self.update_cloud_size)
 
-
+    #Function to update size of list view
     def update_local_size(self):
         json_data = json_handler()
-        # Setting values to labels
         self.lb_files.setText(json_data.get_list("SIZES", "LOCAL_FILES"))
         self.lb_folders.setText(json_data.get_list("SIZES", "LOCAL_FOLDERS"))
         self.lb_size.setText(json_data.get_list("SIZES", "LOCAL_SIZE"))
 
+    #Comprobe sizes of cloud
     def check_cloud_changes(self):
         json_data = json_handler()
         if json_data.get_list("DRIVE", "AUTHENTICATED"):
             set_cloud_sizes()
             self.update_cloud_size()
             
+    #Function to update size of cloud          
     def update_cloud_size(self):
         json_data = json_handler()
-        # Cloud Size
         self.lb_used.setText(json_data.get_list("SIZES", "CLOUD_USED"))
         self.lb_free.setText(json_data.get_list("SIZES", "CLOUD_FREE"))
         self.lb_total.setText(json_data.get_list("SIZES", "CLOUD_TOTAL"))
         self.pr_size.setMinimum(0)
         self.pr_size.setMaximum(100)
         self.pr_size.setValue(json_data.get_list("SIZES", "CLOUD_PERCENT"))
-
+        
+    #Function to set values of config.json      
     def set_values_automatic_backup(self, json_data):
         state_auto = json_data.get_list("DRIVE", "AUTO_BACKUP")
         self.chk_automatic.setChecked(state_auto)
@@ -104,6 +96,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.sp_month.setValue(json_data.get_list("TIMES", "MONTH"))
         self.bt_save_times.setEnabled(state_auto)
 
+    #Function to actualize values of automatic config
     def automatic(self):
         json_data = json_handler()
         state = True
@@ -159,19 +152,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
 
     def startAuthWindow(self):
-        self.hide()  # hide this window
-        self.ui = authWindow.AuthWindow()  # Change to the auth window
-        self.ui.show()  # is displayed via auth window
+        self.hide()  
+        self.ui = authWindow.AuthWindow()
+        self.ui.show() 
 
     def startLogWindow(self):
-        self.hide()  # hide this window
-        self.ui = logWindow.LogWindow()  # Change to the auth window
-        self.ui.show()  # is displayed via auth window
+        self.hide()
+        self.ui = logWindow.LogWindow()
+        self.ui.show()
 
     def startOptionsWindow(self):
-        self.hide()  # hide this window
-        self.ui = optionsWindow.OptionsWindow()  # Change to the auth window
-        self.ui.show()  # is displayed via auth window
+        self.hide()
+        self.ui = optionsWindow.OptionsWindow()
+        self.ui.show()
 
     ##Selector of path
     """Function to select de path of the file"""
@@ -215,7 +208,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             if(check_space_availability()==False):
               self.list_Paths.takeItem(self.list_Paths.count()-1)
               json_data.remove_field_list("DIRECTORIES",self.list_Paths.row(self.list_Paths.item(self.list_Paths.count())))
-            ##json_data.remove_field_list("DIRECTORIES",self.list_Paths.row(self.list_Paths.itemAt(item)))
+              set_local_sizes()
+              self.update_local_size()
               QMessageBox.information(self, "Info", "There is not enough space in drive")
             else:
               QMessageBox.information(self, "Info", "Paths saved")
@@ -266,7 +260,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.worker.not_size.connect(self.not_size)
         self.worker.status.connect(self.show_status)
         self.worker.blk.connect(self.show_problems)
-        # Start the thread
         self.thread.start()
             
     def update_progress(self, progress):
