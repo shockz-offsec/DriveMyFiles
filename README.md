@@ -56,7 +56,7 @@ All the needed info about how to "install | use | enjoy" DriveMyFiles is present
 * [License](https://github.com/jmlgomez73/DriveMyFiles/wiki/License)
 
 
-# Need Help? :information_source:
+### Need Help? :information_source:
 
 * Take a look at the wiki section.
 * Contact us
