@@ -91,7 +91,7 @@ def local_cleaner():
     if json_data.get_list("OPTIONS", "DELETE_BACKUP_LOCAL"):
         dirs = os.listdir('Temp')
         dates = [time.ctime(os.path.getctime('Temp\\'+file)) for file in dirs]
-        count = len(dates) - json_data.get_list("OPTIONS", "NUM_BACKUP_LOCAL")
+        count = len(dates) + 1 - json_data.get_list("OPTIONS", "NUM_BACKUP_LOCAL")
         if count > 0:
             for file in dirs[0:count]:
                 path = 'Temp\\' + file
@@ -111,7 +111,7 @@ def cloud_cleaner():
     if json_data.get_list("OPTIONS", "DELETE_BACKUP_CLOUD"):
         list_backups = get_files(True)
         if list_backups:
-            count = len(list_backups) - json_data.get_list("OPTIONS", "NUM_BACKUP_CLOUD")
+            count = len(list_backups) + 1 - json_data.get_list("OPTIONS", "NUM_BACKUP_CLOUD")
             if count > 0:
                 for bkup in list(list_backups.keys())[0:count]:
                     del_backup(list_backups[bkup])
