@@ -2,9 +2,9 @@
 [![Generic badge](https://img.shields.io/badge/Python-3.9.6-<COLOR>.svg)](https://shields.io/)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Generic badge](https://img.shields.io/badge/Version-1.0-<COLOR>.svg)](https://shields.io/)
-<a style="vertical-align: middle" href="https://open.vscode.dev/jmlgomez73/DriveMyFiles">
+<a vertical-align="center" href="https://open.vscode.dev/jmlgomez73/DriveMyFiles">
 <img width="2%" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Visual_Studio_Code_1.35_icon.svg/240px-Visual_Studio_Code_1.35_icon.svg.png" />
-Open in Visual Studio Code in Web</a>
+</a>Open in Visual Studio Code in Web
 
 
 <h1 align=center>Drive My Files</h1>
