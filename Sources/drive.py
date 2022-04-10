@@ -84,10 +84,10 @@ Args:
 """
 def download_drive(file_id, filename, update_pr=None):
     json_data = json_handler()
-    
+    authenticated = True
     if not json_data.get_list("DRIVE","AUTHENTICATED"):
         logger.warning("No authenticated")
-        return False
+        authenticated = False
 
     if not os.path.exists('Downloads'):
         os.makedirs('Downloads')
@@ -97,10 +97,10 @@ def download_drive(file_id, filename, update_pr=None):
 
     update_pr(percent=55) if (update_pr != None) else None
     args = 'gdrive\gdrive.exe download -r ' + str(file_id) + ' --path "Downloads"'
-    print(args)
     out = ""
     try:
-        out = subprocess.check_output(args, shell=False, stderr=subprocess.STDOUT)
+        if authenticated:
+            out = subprocess.check_output(args, shell=False, stderr=subprocess.STDOUT)
     except Exception as e:
         logger.error("Can't download the backup: "+ str(e))
     
@@ -112,8 +112,9 @@ def download_drive(file_id, filename, update_pr=None):
         os.makedirs(file_path_unzipped)
         unzip(file_path, file_path_unzipped)
         os.remove(file_path)
-    
+        
     update_pr(percent=100) if (update_pr != None) else None
+    return authenticated
     
 
 
