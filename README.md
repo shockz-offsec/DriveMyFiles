@@ -1,5 +1,5 @@
 <div align=center>
-<img src="https://user-images.githubusercontent.com/67438760/139964840-c2832cff-fbc6-4977-a733-f1c58bf58006.png">
+<img width="30%" src="https://user-images.githubusercontent.com/67438760/139964840-c2832cff-fbc6-4977-a733-f1c58bf58006.png">
  </div>
 
 <h1 align=center>Drive My Files</h1>
