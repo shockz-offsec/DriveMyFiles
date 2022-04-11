@@ -1,25 +1,34 @@
+<div align=center>
+<img src="https://user-images.githubusercontent.com/67438760/139964840-c2832cff-fbc6-4977-a733-f1c58bf58006.png">
+ </div>
+
+<h1 align=center>Drive My Files</h1>
+
+ ***
+ 
 [![Windows](https://svgshare.com/i/ZhY.svg)](https://svgshare.com/i/ZhY.svg)
 [![Generic badge](https://img.shields.io/badge/Python-3.9.6-<COLOR>.svg)](https://shields.io/)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Generic badge](https://img.shields.io/badge/Version-1.0-<COLOR>.svg)](https://shields.io/)
+  <a href="https://github.com/jmlgomez73/DriveMyFiles/wiki">
+    <img src="https://img.shields.io/badge/doc-wiki-blue.svg">
+  </a>
 <a vertical-align="center" href="https://open.vscode.dev/jmlgomez73/DriveMyFiles">
 <img width="2%" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Visual_Studio_Code_1.35_icon.svg/240px-Visual_Studio_Code_1.35_icon.svg.png" />
 </a>Open in Visual Studio Code in Web
 
+# Summary
 
-<h1 align=center>Drive My Files</h1>
 
-<div align=center>
-<img src="https://user-images.githubusercontent.com/67438760/139964840-c2832cff-fbc6-4977-a733-f1c58bf58006.png">
- </div>
- 
- ***
+
+
+# Table of Contents
 
 All the needed info about how to "install | use | enjoy" DriveMyFiles is present at [Github's Wiki](https://github.com/jmlgomez73/DriveMyFiles/wiki).
 
 *Content & Features*
 * [Content](https://github.com/jmlgomez73/DriveMyFiles/wiki)
-* [Features](https://github.com/jmlgomez73/DriveMyFiles/wiki/Features)
+* [:fire:Features:fire:](https://github.com/jmlgomez73/DriveMyFiles/wiki/Features)
 
 *Requirements*
 
@@ -30,7 +39,7 @@ All the needed info about how to "install | use | enjoy" DriveMyFiles is present
 
 *Getting Started*
 
-* [Instalation](https://github.com/jmlgomez73/DriveMyFiles/wiki/Instalation)
+* [💿Instalation](https://github.com/jmlgomez73/DriveMyFiles/wiki/Instalation)
   * [Binary Instalation](https://github.com/jmlgomez73/DriveMyFiles/wiki/Instalation#binary-instalation)
   * [Generic Instalation](https://github.com/jmlgomez73/DriveMyFiles/wiki/Instalation#generic-installation)
 * [Usage](https://github.com/jmlgomez73/DriveMyFiles/wiki/Usage)
@@ -46,6 +55,11 @@ All the needed info about how to "install | use | enjoy" DriveMyFiles is present
 * [Pathways for the future](https://github.com/jmlgomez73/DriveMyFiles/wiki/Pathways-for-the-future)
 * [License](https://github.com/jmlgomez73/DriveMyFiles/wiki/License)
 
+
+### Need Help? :information_source:
+
+* Take a look at the wiki section.
+* Contact us
 
 # Authors
 
