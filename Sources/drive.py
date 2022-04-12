@@ -23,7 +23,7 @@ def upload_drive(path):
             
     p = None
     try:
-        p = Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+        p = Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, shell=True)
     except Exception as e:
         logger.error("Can't execute the upload process to Google Drive" + str(e))
         
@@ -46,7 +46,7 @@ def get_credentials(token=None):
     args = ['gdrive\\gdrive.exe', 'about']
     p = None
     try:
-        p = Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+        p = Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, shell=True)
     except Exception as e:
         logger.error("Can't execute the validation process of gdrive" + str(e))
     
@@ -100,7 +100,8 @@ def download_drive(file_id, filename, update_pr=None):
     out = ""
     
     if authenticated:
-        out = subprocess.check_output(args, shell=False, stderr=subprocess.STDOUT)
+        p = Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, shell=True)
+        out, error = p.communicate()
     
     if out: logger.info("Downloaded successfully")
     
@@ -129,7 +130,7 @@ def get_size():
     args = ['gdrive\\gdrive.exe', 'about']
     p = None
     try:
-        p = Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+        p = Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, shell=True)
     except Exception as e:
         logger.error("Cant execute the validation process of gdrive" + str(e))
     
@@ -159,7 +160,7 @@ def del_backup(file_id):
     args = ['gdrive\\gdrive.exe', 'delete', '-r', str(file_id)]
     p = None
     try:
-        p = Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+        p = Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, shell=True)
     except Exception as e:
         logger.error("Cant execute the validation process of gdrive" + str(e))
     
@@ -191,7 +192,8 @@ def get_files(orderbydate):
             args = 'gdrive\\gdrive.exe list --query \"name contains \'backupdrive\'\" --order \"createdTime asc\"'
         else:
             args = 'gdrive\\gdrive.exe list --query \"name contains \'backupdrive\'\" --order \"name desc\"'
-        out = subprocess.check_output(args, shell=False, stderr=subprocess.STDOUT)
+        p = Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, shell=True)
+        out, error = p.communicate()
         out = str(out.decode("utf-8")).split("\n")[1:]
         lenght = len(out)
         
