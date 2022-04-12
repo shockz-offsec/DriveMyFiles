@@ -98,11 +98,9 @@ def download_drive(file_id, filename, update_pr=None):
     update_pr(percent=55) if (update_pr != None) else None
     args = 'gdrive\gdrive.exe download -r ' + str(file_id) + ' --path "Downloads"'
     out = ""
-    try:
-        if authenticated:
-            out = subprocess.check_output(args, shell=False, stderr=subprocess.STDOUT)
-    except Exception as e:
-        logger.error("Can't download the backup: "+ str(e))
+    
+    if authenticated:
+        out = subprocess.check_output(args, shell=False, stderr=subprocess.STDOUT)
     
     if out: logger.info("Downloaded successfully")
     
