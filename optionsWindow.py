@@ -133,11 +133,7 @@ class Download_Backup(QDialog):
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.WindowText, brush)
         self.chk_unzip.setPalette(palette)
         self.chk_unzip.setText("Unzip")
-        self.bt_cancel = QtWidgets.QPushButton(self)
-        self.bt_cancel.setGeometry(QtCore.QRect(280, 280, 21, 23))
-        self.bt_cancel.setText("")
-        self.bt_cancel.setObjectName("bt_cancel")
-        self.bt_cancel.setStyleSheet("image: url(:/DriveMyFiles/Resources/error.ico);")
+
         # Data
         json_data = json_handler()
         self.chk_unzip.setChecked(json_data.get_list("OPTIONS", "UNZIP"))
