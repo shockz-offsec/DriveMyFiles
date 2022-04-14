@@ -113,6 +113,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         json_data.write_field("TIMES", self.sp_day.value(), "DAY")
         json_data.write_field("TIMES", self.sp_hour.value(), "HOUR")
         json_data.write_field("TIMES", self.sp_month.value(), "MONTH")
+        if self.chk_automatic.isChecked():
+           run_task(self.sp_hour.value(),self.sp_day.value(), self.sp_month.value())
+            
 
     def modifyItem(self, item):
         json_data = json_handler()
@@ -240,8 +243,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def backup_thread(self):
         # Initial actions
-        if self.chk_automatic.isChecked():
-            run_task(self.sp_hour.value(),self.sp_day.value(), self.sp_month.value())
         self.update_progress(0)
         # Create a QThread object
         self.thread = QThread()
