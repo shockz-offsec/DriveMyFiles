@@ -115,6 +115,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         json_data.write_field("TIMES", self.sp_month.value(), "MONTH")
         if self.chk_automatic.isChecked():
            run_task(self.sp_hour.value(),self.sp_day.value(), self.sp_month.value())
+           QMessageBox.information(self,"info", "Automatic backup configured")
+           logger.info("Automatic backup configured")
             
 
     def modifyItem(self, item):
