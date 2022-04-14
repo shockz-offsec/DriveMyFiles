@@ -56,7 +56,7 @@ All the needed info about how to "install | use | enjoy" DriveMyFiles is present
 *Requirements*
 
 * [Requirements](https://github.com/jmlgomez73/DriveMyFiles/wiki/Requirements)
-  * [Through the binary](https://github.com/jmlgomez73/DriveMyFiles/wiki/Requirements#through-the-binary)
+  * [Through the precompiled files](https://github.com/jmlgomez73/DriveMyFiles/wiki/Requirements#through-the-binary)
   * [Requirements through Python](https://github.com/jmlgomez73/DriveMyFiles/wiki/Requirements#requirements-through-python)
 * [Compatibility](https://github.com/jmlgomez73/DriveMyFiles/wiki/Compatibility)
 
