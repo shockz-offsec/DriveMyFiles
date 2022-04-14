@@ -56,19 +56,20 @@ All the needed info about how to "install | use | enjoy" DriveMyFiles is present
 *Requirements*
 
 * [Requirements](https://github.com/jmlgomez73/DriveMyFiles/wiki/Requirements)
-  * [Through the binary](https://github.com/jmlgomez73/DriveMyFiles/wiki/Requirements#through-the-binary)
+  * [Through the precompiled files](https://github.com/jmlgomez73/DriveMyFiles/wiki/Requirements#through-the-binary)
   * [Requirements through Python](https://github.com/jmlgomez73/DriveMyFiles/wiki/Requirements#requirements-through-python)
 * [Compatibility](https://github.com/jmlgomez73/DriveMyFiles/wiki/Compatibility)
 
 *Getting Started*
 
 * [💿Instalation](https://github.com/jmlgomez73/DriveMyFiles/wiki/Instalation)
-  * [Binary Instalation](https://github.com/jmlgomez73/DriveMyFiles/wiki/Instalation#binary-instalation)
+  * [Precompiled Instalation](https://github.com/jmlgomez73/DriveMyFiles/wiki/Instalation#binary-instalation)
   * [Generic Instalation](https://github.com/jmlgomez73/DriveMyFiles/wiki/Instalation#generic-installation)
 * [Usage](https://github.com/jmlgomez73/DriveMyFiles/wiki/Usage)
   * [Overview of the application components](https://github.com/jmlgomez73/DriveMyFiles/wiki/Usage#overview-of-the-application-components)
   * [How to link my google drive account with the application](https://github.com/jmlgomez73/DriveMyFiles/wiki/Usage#how-to-link-my-google-drive-account-with-the-application)
   * [How to perform a backup](https://github.com/jmlgomez73/DriveMyFiles/wiki/Usage#how-to-perform-a-backup)
+  * [Configure List of selected directories and files to backup](https://github.com/jmlgomez73/DriveMyFiles/wiki/Usage#configure-list-of-selected-directories-and-files-to-backup)
   * [How to perform automatic scheduled backups](https://github.com/jmlgomez73/DriveMyFiles/wiki/Usage#how-to-perform-automatic-scheduled-backups)
   * [How to download my backups](https://github.com/jmlgomez73/DriveMyFiles/wiki/Usage#how-to-download-my-backups)
 
