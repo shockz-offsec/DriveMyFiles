@@ -192,8 +192,8 @@ def get_files(orderbydate):
             args = 'gdrive\\gdrive.exe list --query \"name contains \'backupdrive\'\" --order \"createdTime asc\"'
         else:
             args = 'gdrive\\gdrive.exe list --query \"name contains \'backupdrive\'\" --order \"name desc\"'
-        p = Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, shell=True)
-        out, error = p.communicate()
+        out = subprocess.check_output(args, shell=True, stderr=subprocess.STDOUT)
+
         out = str(out.decode("utf-8")).split("\n")[1:]
         lenght = len(out)
         
