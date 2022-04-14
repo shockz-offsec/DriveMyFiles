@@ -242,6 +242,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         json_data.write_field("DRIVE", state, "COMPRESS")
 
     def backup_thread(self):
+        # Delete extra local backups
+        local_cleaner()
+        cloud_cleaner()
         # Initial actions
         self.update_progress(0)
         # Create a QThread object
@@ -360,9 +363,6 @@ if __name__ == "__main__":
     # Set sizes in json config file
     set_local_sizes()
     set_cloud_sizes()
-    # Delete extra local backups
-    local_cleaner()
-    cloud_cleaner()
     
     window = MainWindow()
     window.show()

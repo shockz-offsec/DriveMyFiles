@@ -1,33 +1,28 @@
 {
-    "DIRECTORIES": [
-        "C:\\Users\\Usuario\\.RapidMiner",
-        "D:\\fornite",
-        "C:\\Users\\Usuario\\.conda",
-        "D:\\GTAV"
-    ],
+    "DIRECTORIES": [],
     "TIMES": {
         "HOUR": 5,
         "DAY": 4,
         "MONTH": 4
     },
     "DRIVE": {
-        "AUTO_BACKUP": true,
+        "AUTO_BACKUP": false,
         "COMPRESS": true,
-        "AUTHENTICATED": true
+        "AUTHENTICATED": false
     },
     "SIZES": {
         "LOCAL_FILES": "0",
-        "LOCAL_FOLDERS": "4",
-        "LOCAL_SIZE": "303.22 MB",
-        "CLOUD_USED": "10.4 GB",
-        "CLOUD_FREE": "5.7 GB",
-        "CLOUD_TOTAL": "16.1 GB",
-        "CLOUD_PERCENT": 65
+        "LOCAL_FOLDERS": "0",
+        "LOCAL_SIZE": "0.00 B",
+        "CLOUD_USED": "0 GB",
+        "CLOUD_FREE": "0 GB",
+        "CLOUD_TOTAL": "0 GB",
+        "CLOUD_PERCENT": 0
     },
     "OPTIONS": {
         "NUM_BACKUP_LOCAL": 2,
         "DELETE_BACKUP_LOCAL": true,
-        "NUM_BACKUP_CLOUD": 1,
+        "NUM_BACKUP_CLOUD": 2,
         "DELETE_BACKUP_CLOUD": true,
         "UNZIP": false
     }

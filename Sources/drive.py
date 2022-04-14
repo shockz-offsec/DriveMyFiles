@@ -23,7 +23,7 @@ def upload_drive(path):
             
     p = None
     try:
-        p = Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+        p = Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, shell=True)
     except Exception as e:
         logger.error("Can't execute the upload process to Google Drive" + str(e))
         
@@ -46,7 +46,7 @@ def get_credentials(token=None):
     args = ['gdrive\\gdrive.exe', 'about']
     p = None
     try:
-        p = Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+        p = Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, shell=True)
     except Exception as e:
         logger.error("Can't execute the validation process of gdrive" + str(e))
     
@@ -84,10 +84,10 @@ Args:
 """
 def download_drive(file_id, filename, update_pr=None):
     json_data = json_handler()
-    
+    authenticated = True
     if not json_data.get_list("DRIVE","AUTHENTICATED"):
         logger.warning("No authenticated")
-        return False
+        authenticated = False
 
     if not os.path.exists('Downloads'):
         os.makedirs('Downloads')
@@ -97,12 +97,11 @@ def download_drive(file_id, filename, update_pr=None):
 
     update_pr(percent=55) if (update_pr != None) else None
     args = 'gdrive\gdrive.exe download -r ' + str(file_id) + ' --path "Downloads"'
-    print(args)
     out = ""
-    try:
-        out = subprocess.check_output(args, shell=False, stderr=subprocess.STDOUT)
-    except Exception as e:
-        logger.error("Can't download the backup: "+ str(e))
+    
+    if authenticated:
+        p = Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, shell=True)
+        out, error = p.communicate()
     
     if out: logger.info("Downloaded successfully")
     
@@ -112,8 +111,9 @@ def download_drive(file_id, filename, update_pr=None):
         os.makedirs(file_path_unzipped)
         unzip(file_path, file_path_unzipped)
         os.remove(file_path)
-    
+        
     update_pr(percent=100) if (update_pr != None) else None
+    return authenticated
     
 
 
@@ -130,7 +130,7 @@ def get_size():
     args = ['gdrive\\gdrive.exe', 'about']
     p = None
     try:
-        p = Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+        p = Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, shell=True)
     except Exception as e:
         logger.error("Cant execute the validation process of gdrive" + str(e))
     
@@ -160,7 +160,7 @@ def del_backup(file_id):
     args = ['gdrive\\gdrive.exe', 'delete', '-r', str(file_id)]
     p = None
     try:
-        p = Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+        p = Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, shell=True)
     except Exception as e:
         logger.error("Cant execute the validation process of gdrive" + str(e))
     
@@ -192,7 +192,8 @@ def get_files(orderbydate):
             args = 'gdrive\\gdrive.exe list --query \"name contains \'backupdrive\'\" --order \"createdTime asc\"'
         else:
             args = 'gdrive\\gdrive.exe list --query \"name contains \'backupdrive\'\" --order \"name desc\"'
-        out = subprocess.check_output(args, shell=False, stderr=subprocess.STDOUT)
+        out = subprocess.check_output(args, shell=True, stderr=subprocess.STDOUT)
+
         out = str(out.decode("utf-8")).split("\n")[1:]
         lenght = len(out)
         

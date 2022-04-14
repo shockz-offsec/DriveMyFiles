@@ -117,7 +117,7 @@ class Download_Backup(QDialog):
         self.pr_download = QtWidgets.QProgressBar(self)
         self.pr_download.setGeometry(QtCore.QRect(140, 280, 112, 23))
         self.pr_download.setProperty("value", 0)
-        self.pr_download.setObjectName("pr_download")   
+        self.pr_download.setObjectName("pr_download")
         self.chk_unzip = QtWidgets.QCheckBox(self)
         self.chk_unzip.setGeometry(QtCore.QRect(320, 240, 51, 21))
         self.chk_unzip.setObjectName("chk_unzip")
@@ -165,7 +165,11 @@ class Download_Backup(QDialog):
         
         # If there's no backup selected, no actions will be executed
         try:
-            filename = self.list_backups.currentItem().text()
+            if self.list_backups.selectedItems():
+                filename = self.list_backups.currentItem().text()
+            else:
+                QMessageBox.warning(self, "Warning", "Select a item to donwload")
+                return False
         except:
             return False
         
@@ -177,6 +181,7 @@ class Download_Backup(QDialog):
         # Move worker to the thread
         self.worker.moveToThread(self.thread)
         # Connect signals and slots
+        self.worker.error.connect(self.show_error)
         self.thread.started.connect(lambda: self.worker.run(files[filename], filename))
         self.worker.finished.connect(self.thread.quit)
         self.worker.finished.connect(self.worker.deleteLater)
@@ -195,19 +200,24 @@ class Download_Backup(QDialog):
             self.bt_download.setEnabled(True)
             QMessageBox.warning(
                 self, "Warning", "You need to be authenticated")
+    def show_error(self):
+        QMessageBox.warning(
+                self, "Warning", "The backup you are trying to download already exist")
     
 class Worker(QObject):
     finished = pyqtSignal()
     progress = pyqtSignal(int)
     blk = pyqtSignal(bool)
+    error = pyqtSignal()
 
     def run(self, file_id, filename):
         try:
             out = drive.download_drive(file_id, filename, self.update_progress)
             self.blk.emit(out)
             self.finished.emit()
-        except (OSError, IndexError, FileNotFoundError) as e:
-            self.status.emit("Problems downloading the file or files",True)
+        except Exception as e:
+            self.error.emit()
+            print(e)
             logger.error(e)
             self.progress.emit(0)
             self.finished.emit()
