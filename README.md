@@ -19,6 +19,13 @@
 
 # Summary
 
+DriveMyFiles offers through an intuitive and easy to use interface, the possibility to easily backup manually or automatically to Google Drive the files/directories you want by selecting them through a file explorer.
+
+Authentication with Google Drive is done via OAuth 2.0 in a very simple way, with a simple click and copy and paste of the generated token.
+
+Backups can be executed manually with a single click or automatically by setting a schedule and saving it, in the latter case even if you turn off your computer the backup will still be done.
+
+Other functionalities offered by the application are: uploading the compressed backup, downloading the desired backup from Google Drive and preserving a number of backups defined by the user both locally and in the cloud.
 
 # Overview
 
