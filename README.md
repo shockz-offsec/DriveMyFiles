@@ -63,7 +63,7 @@ All the needed info about how to "install | use | enjoy" DriveMyFiles is present
 *Getting Started*
 
 * [💿Instalation](https://github.com/jmlgomez73/DriveMyFiles/wiki/Instalation)
-  * [Binary Instalation](https://github.com/jmlgomez73/DriveMyFiles/wiki/Instalation#binary-instalation)
+  * [Precompiled Instalation](https://github.com/jmlgomez73/DriveMyFiles/wiki/Instalation#binary-instalation)
   * [Generic Instalation](https://github.com/jmlgomez73/DriveMyFiles/wiki/Instalation#generic-installation)
 * [Usage](https://github.com/jmlgomez73/DriveMyFiles/wiki/Usage)
   * [Overview of the application components](https://github.com/jmlgomez73/DriveMyFiles/wiki/Usage#overview-of-the-application-components)
